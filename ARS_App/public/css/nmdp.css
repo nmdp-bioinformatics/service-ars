@@ -1,0 +1,271 @@
+
+.screen-small, .print, .hide-screen-large { display: none !important; }
+
+.nav-footer_mobile a.show_main_nav {
+	display: none !important;
+}
+
+.align {
+    padding: 0 10px;
+}
+
+.align {
+
+	min-width: 260px;
+	padding: 0 30px;
+	margin: 0 auto;
+	position: relative;
+}
+
+.centered {
+	text-align: center;
+}
+
+.page-foot h5,
+.page-foot h5 a {
+	color: #003758;
+	font-size: 1.125em;
+	text-transform: uppercase;
+	line-height: 1.2em;
+}
+
+
+.page-foot .social-links {
+	border: 2px solid #045493;
+	border-left: 0;
+	border-right: 0;
+	padding: 30px 0 20px 0;
+}
+
+
+.page-foot .link-list a,
+.page-foot .link-row a {
+    display: block;  
+    line-height: 1.25em;
+}
+
+.legal .link-row a {
+    display: inline-block;
+}
+
+.page-foot .link-list a:hover,
+.page-foot .link-row a:hover {
+	text-decoration: underline;
+}
+
+.footer-links li a, .page-foot .footer-links .link-list a {
+    display: inline-block;
+}
+
+.banner-footer {
+	background: #bdcc2a;
+	min-height: 50px;
+	position: relative;
+}
+
+
+
+
+.clearfix:after, .colgroup:after, .colgroup-keep_mobile:after {content: ' ';display: block;clear: both;}
+
+.callout a {
+	font-weight: bold;
+	text-decoration: none;
+}
+
+.banner .align-right .copy {
+    right: 100px;
+    text-align: right;
+}
+
+
+.align-right * .caption {
+    left: 0px;
+    right: auto;
+    text-align: left;
+}
+
+.banner .align-right .copy {
+    text-align: left;
+}
+.banner .align-right .copy {
+    text-align: right;
+}
+
+.align-left * div.copy div {
+    text-align: left;
+}
+.align-right * div.copy div {
+    text-align: right;
+}
+
+div.slide.align-left div {
+    text-align: left;
+}
+div.slide.align-right div {
+    text-align: right;
+}
+
+
+
+.section-cta .row-padding {
+  padding-top: 100px; 
+}
+
+.reverse a,
+.inverse a {
+	color: #fff;
+}
+
+.link-group, 
+.link-list,
+.link-row {
+	padding: 0 0 1em 0;
+	margin: 0;
+	list-style: none;
+}	
+
+.link-group a, 
+.link-list a,
+.link-row a{
+	text-decoration: none;
+}
+
+
+
+.link-row li,
+.link-row a {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.link-row h1,
+.link-row h2,
+.link-row h3, 
+.link-row h4,
+.link-row h5,
+.link-row h6,
+.link-row .h6  {
+	display: inline-block;
+}
+
+
+.social-links .link-row li {
+  padding-bottom: 10px;
+}
+
+.page-foot .link-list a,
+.page-foot .link-row a {
+    display: block;  
+    line-height: 1.25em;
+}
+
+.legal .link-row a {
+    display: inline-block;
+}
+
+.page-foot .link-list a:hover,
+.page-foot .link-row a:hover {
+	text-decoration: underline;
+}
+
+.social-links .link-row a:hover [class^="nmdp_icon-"]:before {
+  display: inline-block;
+  text-decoration: none;
+}
+
+.banner-footer {
+	background: #bdcc2a;
+	min-height: 50px;
+	position: relative;
+}
+
+.page-foot {
+	font-size: 16px;
+	line-height: 1em;
+	font-family: "ProximaNovaRegular", Helvetica, sans-serif;
+	font-weight: normal;
+	/*background: #0079c1; 100% width footer bg color */
+	/*color: #333333;*/
+	-webkit-font-smoothing: antialiased;
+    min-width: 320px;
+    width: 100%;
+    margin-bottom: 0px;
+}
+
+.inverse a.button, 
+.inverse a .button, 
+.inverse input.button, 
+.inverse button.button,
+.inverse input[type=button],
+.inverse input[type=submit],
+.inverse a.button-carrot,
+.inverse a .button-carrot  {
+  background-color: #1797E4;
+}
+
+.logo,
+.callout-logo {
+	float: left;
+	display: inline-block;
+	position: relative;
+	padding: 3px 5px 0 0;
+}
+
+.logo img,
+.callout-logo img {
+	display: block;
+	max-width: 100%;
+}
+
+.callout-logo {
+    background: url("/images/btm_logo2.png") no-repeat;
+    width: 230px;
+    height: 65px;
+    margin: 5px 0 0 0;
+    background-size: 100%;
+}
+
+.callout {
+    font-size: 1.2em;
+    display: block;
+    padding: 0;
+    margin: 0;
+}
+
+
+.inverse,
+.reverse {
+	color: #fff;
+}
+
+.inverse p {
+	color: #003758;
+}
+
+
+.banner-footer .callout {
+	width: 72%;
+	float: right;
+	text-align: right;
+	display: inline-block;
+	vertical-align: middle;
+	margin-top: 23px;
+}
+
+
+.legal {
+	font-size: 0.875em;
+}
+
+.legal p {
+    margin: 0 0 .5em;
+
+    font-size: .9em;
+}
+
+
+.legal .link-row a {
+    display: inline-block;
+}
+
