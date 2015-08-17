@@ -1,9 +1,65 @@
+#!/usr/bin/env perl
+=head1 NAME
+
+    ARS_App
+
+=head1 SYNOPSIS
+
+
+=head1 AUTHOR     Mike Halagan <mhalagan@nmdp.org>
+    
+    Bioinformatics Scientist
+    3001 Broadway Stree NE
+    Minneapolis, MN 55413
+    ext. 8225
+
+=head1 DESCRIPTION
+
+    This script takes in the output of ngs-validate-interp and the observed file and generates
+    a static HTML website report.
+
+=head1 CAVEATS
+	
+
+=head1 LICENSE
+
+    pipeline  Consensus assembly and allele interpretation pipeline.
+    Copyright (c) 2015 National Marrow Donor Program (NMDP)
+
+    This library is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as published
+    by the Free Software Foundation; either version 3 of the License, or (at
+    your option) any later version.
+
+    This library is distributed in the hope that it will be useful, but WITHOUT
+    ANY WARRANTY; with out even the implied warranty of MERCHANTABILITY or
+    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+    License for more details.
+ 
+    You should have received a copy of the GNU Lesser General Public License
+    along with this library;  if not, write to the Free Software Foundation,
+    Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA.
+
+    > http://www.gnu.org/licenses/lgpl.html
+
+=head1 VERSIONS
+	
+    Version    Description              Date
+
+
+=head1 TODO
+	
+
+=head1 SUBROUTINES
+
+=cut
 package ARS_App;
 use Dancer ':syntax';
 use ARS;
 
 our $VERSION = '0.1';
 
+# Initializing new ARS object
 my $ars  = new ARS();
 my %h_cached_glstrings;
 
@@ -15,60 +71,45 @@ my %h_valid_loci = (
 	"DPB1" => 1
 );
 
-sub isValid{
 
-	my($glstring) = shift;
+=head2 index
 
-	return $h_cached_glstrings{$glstring}
-		if(defined $h_cached_glstrings{$glstring});
-
-	if(!defined $glstring || $glstring !~ /\S/ || $glstring !~ /\*/ || 
-		$glstring !~ /\:/){
-		$h_cached_glstrings{$glstring} = "No Glstring provided!";
-		return "No Glstring provided!";
-	}
-
-	if($glstring =~ /\+\d+/){
-		$h_cached_glstrings{$glstring} = "Invalid glstring! Missing locus!";
-		return "Invalid glstring! Missing locus!";
-	}
-
-	if( $glstring =~ /\+$/ || $glstring =~ /\|$/ || $glstring =~ /^\|/ || 
-		$glstring =~ /^\+/ || $glstring =~ /^\^/ || $glstring =~ /^\*/ || 
-		$glstring =~ /\*$/ || $glstring =~ /\~$/ || $glstring =~ /^\~/ ){
-		$h_cached_glstrings{$glstring} = "Invalid glstring!";
-		return "Invalid glstring!"
-	}
-
-	foreach($glstring =~ /(\w+\d{0,1})\*/g){
-		if(!defined $h_valid_loci{$_}){
-			$h_cached_glstrings{$glstring} = "Invalid locus! $_";
-			return "Invalid locus! $_";
-		}
-	}
-
-	return;
-
-}
-
+	
+=cut
 get '/' => sub {
     template 'index';
 };
 
+=head2 about
 
+	
+=cut
 get '/about' => sub {
     template 'about';
 };
 
+=head2 contact
+
+	
+=cut
 get '/contact' => sub {
     template 'contact';
 };
 
+
+=head2 login
+
+	
+=cut
 get '/login' => sub {
     template 'login';
 };
 
 
+=head2 reduxfile
+
+	
+=cut
 post '/reduxfile' => sub {
 
  	my $file     = request->upload('filename');
@@ -123,6 +164,11 @@ post '/reduxfile' => sub {
 
 };
 
+
+=head2 redux
+
+	
+=cut
 get '/redux' => sub {
 
 	my $arsType   = params->{'arsType'};
@@ -159,6 +205,12 @@ get '/redux' => sub {
 
 };
 
+
+
+=head2 API Call
+
+	
+=cut
 get '/api/v1/' => sub {
 
     my $db       = param('dbversion');
@@ -192,5 +244,48 @@ get '/api/v1/' => sub {
 
 };
 
+
+=head2 isValid
+
+        Title:    isValid
+        Usage:    isValid($glstring);
+        Function: 
+	
+=cut
+sub isValid{
+
+	my($glstring) = shift;
+
+	return $h_cached_glstrings{$glstring}
+		if(defined $h_cached_glstrings{$glstring});
+
+	if(!defined $glstring || $glstring !~ /\S/ || $glstring !~ /\*/ || 
+		$glstring !~ /\:/){
+		$h_cached_glstrings{$glstring} = "No Glstring provided!";
+		return "No Glstring provided!";
+	}
+
+	if($glstring =~ /\+\d+/){
+		$h_cached_glstrings{$glstring} = "Invalid glstring! Missing locus!";
+		return "Invalid glstring! Missing locus!";
+	}
+
+	if( $glstring =~ /\+$/ || $glstring =~ /\|$/ || $glstring =~ /^\|/ || 
+		$glstring =~ /^\+/ || $glstring =~ /^\^/ || $glstring =~ /^\*/ || 
+		$glstring =~ /\*$/ || $glstring =~ /\~$/ || $glstring =~ /^\~/ ){
+		$h_cached_glstrings{$glstring} = "Invalid glstring!";
+		return "Invalid glstring!"
+	}
+
+	foreach($glstring =~ /(\w+\d{0,1})\*/g){
+		if(!defined $h_valid_loci{$_}){
+			$h_cached_glstrings{$glstring} = "Invalid locus! $_";
+			return "Invalid locus! $_";
+		}
+	}
+
+	return;
+
+}
 
 true;

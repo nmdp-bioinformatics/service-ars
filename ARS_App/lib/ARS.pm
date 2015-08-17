@@ -1,30 +1,58 @@
-#!/usr/local/bin/perl
-##############################################################################
-# SCRIPT NAME:	ARS.pm
-# DESCRIPTION:	
-#
-#
-# DATE WRITTEN: 
-# WRITTEN BY:   Martin J. Maiers
-#
-# REVISION HISTORY: 
-# REVISION DATE			REVISED BY		DESCRIPTION 
-# ------- ----------	--------------	-------------------------------------
-#         2012-05-28    Mike Halagan    Made it object oriented and now includes 
-#										P2G,G2W and little g codes
-#         2013-03-02    Mike Halagan    Condensed the code and changed where the 
-#										data is coming from.
-#		  2013-03-12	Mike Halagan	hard code C*02:10 -> C*02:02
-#		  2014-11-17	Mike Halagan	Reengineered to work for the BMDW extract. 
-#											- Removed WMDA2WHO db connection
-#											- Added test scripts								
-#											- Added documentation
-#											- Added examples
-#											- Added test scripts
-#
-#       COPYRIGHT (C) 1994, 1995, 1997 NATIONAL MARROW DONOR PROGRAM.  
-#                           ALL RIGHTS RESERVED        
-##############################################################################
+#!/usr/bin/env perl
+=head1 NAME
+
+    ARS
+
+=head1 SYNOPSIS
+
+
+=head1 AUTHOR     Mike Halagan <mhalagan@nmdp.org>
+    
+    Bioinformatics Scientist
+    3001 Broadway Stree NE
+    Minneapolis, MN 55413
+    ext. 8225
+
+=head1 DESCRIPTION
+
+    This script takes in the output of ngs-validate-interp and the observed file and generates
+    a static HTML website report.
+
+=head1 CAVEATS
+	
+
+=head1 LICENSE
+
+    pipeline  Consensus assembly and allele interpretation pipeline.
+    Copyright (c) 2015 National Marrow Donor Program (NMDP)
+
+    This library is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as published
+    by the Free Software Foundation; either version 3 of the License, or (at
+    your option) any later version.
+
+    This library is distributed in the hope that it will be useful, but WITHOUT
+    ANY WARRANTY; with out even the implied warranty of MERCHANTABILITY or
+    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+    License for more details.
+ 
+    You should have received a copy of the GNU Lesser General Public License
+    along with this library;  if not, write to the Free Software Foundation,
+    Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA.
+
+    > http://www.gnu.org/licenses/lgpl.html
+
+=head1 VERSIONS
+	
+    Version    Description              Date
+
+
+=head1 TODO
+	
+
+=head1 SUBROUTINES
+
+=cut
 use strict;;##################################################################
 use warnings;;################################################################
 use Fcntl;####################################################################
