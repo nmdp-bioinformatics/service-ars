@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mike Halagan">
+
+    <title>ARS</title>
+
+    <link href="<% request.uri_base %>/css/font-awesome.css" rel="stylesheet">
+
+    <link rel="icon" href="http://hgtr.b12x.org/favicon.ico" type="image/gif">
+
+    <!-- Bootstrap Core CSS -->
+    <link href="<% request.uri_base %>/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="<% request.uri_base %>/css/heroic-features.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="<% request.uri_base %>/css/bootstrap-social.css" rel="stylesheet">
+
+    <!-- jQuery -->
+    <script src="<% request.uri_base %>/javascripts/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="<% request.uri_base %>/javascripts/bootstrap.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="<% request.uri_base %>/javascripts/jquitelight.min.js"></script>
+    
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    
+    <script>
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip(); 
+        });
+    </script>
+
+    <script>
+    $(document).ready(function(){ 
+        $("#Demo-BS .btn").click(function(){
+            $(this).button('loading').delay(2000).queue(function(){
+                $(this).button('reset');
+                $(this).dequeue();
+            });        
+        });
+    });   
+    </script>
+
+    <script>
+    function getAction(){
+        var x = document.getElementById("myFile");
+        var txt = "";
+        if (x.files.length == 0) {
+          var redux = document.getElementById("reduxForm");
+          redux.action = "<% ars_redux_url %>";
+          redux.method = "GET";
+        }else{
+          var redux = document.getElementById("reduxForm");
+          redux.action = "<% ars_reduxfile_url %>";
+          redux.method = "POST";
+        }   
+    }
+    </script>
+
+    <script>
+      function highlightArsGroups(){
+        $('.highlightGroup').each(function(i) {
+            if(this.style.backgroundColor !== "yellow"){
+              this.style.backgroundColor = "yellow";
+            }else{
+              this.style.backgroundColor = "";
+            }
+        });
+      }
+    </script>
+
+    <style>
+        .footer {
+            bottom: 0;
+            height: 100px;
+            position: absolute;
+        }
+        .marked-text{
+            background-color: rgb(252,248,227);
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <div id='header'>
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header" style="padding-bottom: 15px;">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand page-scroll" href="https://bethematch.org/"><img src="<% request.uri_base %>/images/btm_logo.png"></img> </a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="margin-top:5px;">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="<% request.uri_base %>">Home</a></li>
+                        <li>
+                            <a href="<% request.uri_base %>/about">About</a>
+                        </li>
+                        <li>
+                            <a href="<% request.uri_base %>/contact">Contact</a>
+                        </li>
+                       <li class="dropdown">
+
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                          Resources <span class="caret"></span></a>
+                          <ul class="dropdown-menu">
+                            <li><a href="#">Swagger</a></li>
+                            <li><a href="#">FitNesse</a></li>
+                            <li><a href="#">Github</a></li>
+                            <li><a href="#">G Groups</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">Client Download</a></li>
+                          </ul>
+                        </li>
+
+                        <li>
+                            <a href="<% request.uri_base %>/login">Sign in</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
+    </div>
+
+    <style>
+    .navbar-header a{
+        padding-top: 0;
+        padding-bottom: 60;
+    }
+    </style>
+
+    <!-- Page Content -->
+    <div class="container" style="margin-bottom:200px;">
+
+        <% content %>
+
+
+    </div>
+
+
+    <div style="width:100%; bottom: 0px; position: fixed;">
+        <link href="<% request.uri_base %>/css/nmdp.css" rel="stylesheet">
+        <!-- footer pulled from elsewhere -->
+
+        <div class="screen-small nav-footer_mobile align"></div>
+
+          <footer id="page-foot" class="page-foot" >
+          <div class="banner-footer" >
+            <div class="align clearfix" style="width:60%;">
+              <div class="callout-logo"></div>
+              <p class="callout align-right" >
+                Join a community transplanting hope. <a
+                  href="http://www.bethematchfoundation.org/site/Donation2?df_id=6000&6000.donation=form1">Give</a>.
+                <a href="http://bethematch.org/Support-the-Cause/Donate-bone-marrow/Join-the-marrow-registry/">Join</a>.
+                <a href="http://bethematch.org/Support-the-Cause/Participate/Volunteer/">Volunteer</a>.
+                <a href="http://bethematch.org/For-Patients-and-Families/">Learn</a>.
+              </p>
+            </div>
+          </div>
+
+          <div class="align legal centered row-padding inverse" style="font-size: .9em;background: #0079c1;width:100%;padding-top:5px;padding-bottom:5px;">
+            <div class="link-row" style="font-size: .9em;">
+              <a href="http://bethematch.org/Terms-of-use/" >Terms of use</a> <a href="http://bethematch.org/Privacy/" >Privacy
+                policy</a>
+            </div>
+            <p >National Marrow Donor Program - Entrusted to operate the C.W.
+              Bill Young Cell Transplantation Program, including Be The Match
+              Registry®.</p>
+            <p id="copyright">Copyright © 1996-2015 National Marrow Donor
+              Program. All Rights Reserved.</p>
+          </div>
+          </footer>
+
+    </div>
+    <!-- /.container -->
+
+</body>
+
+</html>
