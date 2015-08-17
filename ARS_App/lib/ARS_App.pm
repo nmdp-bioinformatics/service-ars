@@ -55,6 +55,7 @@
 =cut
 package ARS_App;
 use Dancer ':syntax';
+use Data::Dumper;
 use ARS;
 
 our $VERSION = '0.1';
@@ -211,14 +212,16 @@ get '/redux' => sub {
 
 	
 =cut
-get '/api/v1/' => sub {
+get '/api/v1/redux' => sub {
 
-    my $db       = param('dbversion');
-    my $ars_type = param('arsType');
-    my $glstring = param('glstring');
+    my $dbversion = param('dbversion');
+    my $ars_type  = param('arsType');
+    my $glstring  = param('glstring');
 
     $glstring   =~ s/ /\+/g;
+    $dbversion =~ s/\.//g;
     $glstring   =~ /^(\D+\d{0,1})\*/;
+    
     my $s_locus = $1;
 	my $s_error = isValid($glstring);
     
@@ -227,14 +230,15 @@ get '/api/v1/' => sub {
 			error => $s_error
 	    };
     }else{
-    	my $s_ars_glstring = $ars->redux($glstring,$db,$ars_type);
+    	my $s_ars_glstring = $ars->redux($glstring,$dbversion,$ars_type);
+
 	    if($s_ars_glstring =~ /Invalid/){
 		    return {
 		        error => $s_ars_glstring
 		    };
 		}else{
 		    return {
-		        dbversion => $db,
+		        dbversion => $dbversion,
 		        arsType   => $ars_type,
 		        locus     => $s_locus,
 		        glstring  => $s_ars_glstring

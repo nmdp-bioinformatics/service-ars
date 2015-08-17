@@ -53,12 +53,13 @@
 =head1 SUBROUTINES
 
 =cut
-use strict;;##################################################################
-use warnings;;################################################################
+
+package ARS;################################################################
+use strict;##################################################################
+use warnings;################################################################
 use Fcntl;####################################################################
 use Data::Dumper;#############################################################
 use LWP::UserAgent;###########################################################
-package ARS;##################################################################
 ##############################################################################
 #	************	
 #	** ARS.pm ** 	
@@ -228,7 +229,7 @@ sub redux {
 		if ($glstring=~/\//);
 	return join '/',dedup(map($self->redux($_,$dbv,$s_redux_type),(split /\//,$self->$ac2gl($glstring))))
 		if isAC($glstring);
-	
+
 	if($glstring !~ /\S/ || $glstring !~ /\d{2,3}:(\d{2,3}|\D{2,6})/){
 		print STDERR "Not a vaild allele! $! $glstring\n";
 		return ""; 
@@ -262,7 +263,6 @@ sub redux_mark {
 	return join '/',dedup(map($self->redux_mark($_,$dbv,$s_redux_type),(split /\//,$self->$ac2gl($glstring))))
 		if isAC($glstring);
 	
-
 	if($glstring !~ /\S/ || $glstring !~ /\d{2,3}:(\d{2,3}|\D{2,6})/){
 		print STDERR "Not a vaild allele! $! $glstring\n";
 		return ""; 

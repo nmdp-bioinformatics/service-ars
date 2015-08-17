@@ -54,6 +54,7 @@
 	
 =cut
 use Dancer;
+use Data::Dumper;
 use ARS_App;
 
 set 'template'     => 'template_toolkit';
