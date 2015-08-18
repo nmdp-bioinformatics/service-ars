@@ -1,0 +1,125 @@
+  
+<!-- 
+    Credit goes to the Ruby on Rails team for this page which
+    has been heavily based on the default Rails page that is
+    built with a scaffolded application.
+
+    Thanks a lot to them for their work.
+
+    See Ruby on Rails if you want a kickass framework in Ruby:
+    http://www.rubyonrails.org/
+-->
+
+
+<script>
+
+    function downloadClient(){
+        var terms = document.getElementById("terms");
+        if (terms.checked == false) {
+        	document.getElementById("term_alert").style.display = "block";
+        }else{
+        	document.getElementById("term_alert").style.display = "none";
+        	document.getElementById('submit_modal').submit();
+        }   
+    }
+
+</script>
+
+<!-- Jumbotron Header -->
+<legend style="text-align:left;margin-top:25px;">API Client Download</legend>
+
+<dl>
+  <dt>Perl Client Download</dt>
+	<dd>
+	  	<button data-toggle="modal" data-target="#myModal" style="background-color: Transparent; background-repeat:no-repeat;border: none;cursor:pointer; overflow: hidden;padding:0 0 0 0;">
+	  		<a>perl-ars-client-v1.0.0.tar.gz</a>
+		</button>
+	</dd>
+	<dd>
+	  	<button data-toggle="modal" data-target="#myModal" style="background-color: Transparent; background-repeat:no-repeat;border: none;cursor:pointer; overflow: hidden;padding:0 0 0 0;">
+	  		<a>perl-ars-client-v1.0.0.zip</a>
+		</button>
+	</dd>
+  <br>
+    <dt>Java Client Download</dt>
+  	<dd>Coming soon!</dd>
+  <br>
+	<dt>Python Client Download</dt>
+	<dd>Coming soon!</dd>
+  <br>
+	<dt>R Client Download</dt>
+	<dd>Coming soon!</dd>	
+</dl>
+
+<!-- Button trigger modal -->
+
+
+<!-- Perl Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Perl Client Download</h4>
+      </div>
+      <div class="modal-body">
+    pipeline  Consensus assembly and allele interpretation pipeline.
+    <br>
+    Copyright (c) 2015 National Marrow Donor Program (NMDP)
+    <br>
+    This library is free software; you can redistribute it and/or modify it
+    <br>
+    under the terms of the GNU Lesser General Public License as published
+    <br>
+    by the Free Software Foundation; either version 3 of the License, or (at
+    <br>
+    your option) any later version.
+    <br><br>
+
+    This library is distributed in the hope that it will be useful, but WITHOUT
+    <br>
+    ANY WARRANTY; with out even the implied warranty of MERCHANTABILITY or
+    <br>
+    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+    <br>
+    License for more details.
+ 	<br><br>
+
+    You should have received a copy of the GNU Lesser General Public License
+    <br>
+    along with this library;  if not, write to the Free Software Foundation,
+    <br>
+    Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA.
+
+    > http://www.gnu.org/licenses/lgpl.html
+      </div>
+      <div class="modal-footer">
+      	<form id="submit_modal" action="<% request.uri_base %>/download" >
+	      	<div class="checkbox text-left" style="margin-left:15px;margin-bottom:15px;">
+		    	<label>
+		    		<input id="terms" type="checkbox" class="checkbox text-left" > I agree to the terms of use
+		   		</label>
+		  	</div>
+	  	  	<div class="col-sm-6" style="margin-bottom:25px;">
+				<div class="input-group input-group-sm" >
+			  	   <span class="input-group-addon">Download</span>
+			        <select class="form-control" name="type">
+			            <option>perl-ars-client-v1.0.0.tar.gz</option>
+			            <option>perl-ars-client-v1.0.0.zip</option>                  
+			        </select>
+			    </div>
+			</div>
+
+		  	<div style="margin-top:60px;display:none;text-align:center;" id="term_alert" class="alert alert-danger" role="alert"><b>You must accept terms before downloading</b></div>
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary" onClick="downloadClient()">Download</button>
+	    </form> 
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+

@@ -12,3 +12,16 @@
 
 <!-- Jumbotron Header -->
 <legend style="text-align:left;margin-top:25px;">Contact</legend>
+
+<address>
+  <strong>Mike Halagan</strong><br>
+  Bioinformatics Scientist<br>
+  3001 Broadway Stree NE<br>
+  Minneapolis, MN 55413<br>
+  <abbr title="Phone">P:</abbr> 612-884-8225
+</address>
+
+<address>
+  <strong>Email Address</strong><br>
+  <a href="mailto:#">mhalagan@nmdp.org</a>
+</address>

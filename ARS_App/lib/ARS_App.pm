@@ -72,6 +72,10 @@ my %h_valid_loci = (
 	"DPB1" => 1
 );
 
+my %h_client_zips = (
+	"perl-ars-client-v1.0.0.zip" => '/downloads/perl-ars-client-v1.0.0.zip',
+	"perl-ars-client-v1.0.0.tar.gz" => '/downloads/perl-ars-client-v1.0.0.tar.gz'
+);
 
 =head2 index
 
@@ -106,6 +110,42 @@ get '/login' => sub {
     template 'login';
 };
 
+=head2 clients
+
+	
+=cut
+get '/soon' => sub {
+    template 'soon';
+};
+
+
+=head2 clients
+
+	
+=cut
+get '/clients' => sub {
+    template 'clients';
+};
+
+=head2 download
+
+	
+=cut
+get '/download' => sub {
+
+	my $client_type = params->{type};
+
+	if(defined $h_client_zips{$client_type}){
+    	return send_file($h_client_zips{$client_type});
+	}else{
+		template 'error', {
+        	'error'  => "Not a valid file client type"
+		}
+	}
+
+	 redirect '/clients';
+
+};
 
 =head2 reduxfile
 

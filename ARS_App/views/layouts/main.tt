@@ -132,12 +132,11 @@
                           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                           Resources <span class="caret"></span></a>
                           <ul class="dropdown-menu">
-                            <li><a href="#">Swagger</a></li>
-                            <li><a href="#">FitNesse</a></li>
-                            <li><a href="#">Github</a></li>
-                            <li><a href="#">G Groups</a></li>
+                            <li><a href="<% request.uri_base %>/soon">Swagger</a></li>
+                            <li><a href="<% request.uri_base %>/soon">FitNesse</a></li>
+                            <li><a href="https://github.com/nmdp-bioinformatics/service-ars">Github</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="#">Client Download</a></li>
+                            <li><a href="<% request.uri_base %>/clients">Client Download</a></li>
                           </ul>
                         </li>
 

@@ -11,9 +11,8 @@
 -->
 
 <!-- Jumbotron Header -->
-<legend style="text-align:left;margin-top:25px;">About</legend>
-
-
-<!-- Use http://getbootstrap.com/javascript/#scrollspy -->
+<header class="jumbotron hero-spacer" style="margin-top:50px;">
+	<h2 style="text-align:center;"> Coming Soon! </h2>
+</header>
 
 
