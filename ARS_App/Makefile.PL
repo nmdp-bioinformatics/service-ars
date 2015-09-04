@@ -9,9 +9,9 @@ $eumm_version =~ s/_//;
 
 WriteMakefile(
     NAME                => 'ARS_App',
-    AUTHOR              => q{YOUR NAME <youremail@example.com>},
+    AUTHOR              => q{Michael Halagan <youremail@example.com>},
     VERSION_FROM        => 'lib/ARS_App.pm',
-    ABSTRACT            => 'YOUR APPLICATION ABSTRACT',
+    ABSTRACT            => 'ARS reduction service',
     ($eumm_version >= 6.3001
       ? ('LICENSE'=> 'perl')
       : ()),
