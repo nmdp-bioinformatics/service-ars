@@ -180,7 +180,7 @@ sub new{
     $self->{acurl}   = shift();
 
     $self->{verbose} = !defined $self->{verbose} ? 0 : $self->{verbose};
-	$self->{acurl}   = !defined $self->{acurl}   ? "http://opshmlservices2.b12x.org:8080/mac/" : $self->{acurl};
+	$self->{acurl}   = !defined $self->{acurl}   ? "http://emmes-dev.nmdp.org:8080/ac/" : $self->{acurl};
 
 	bless($self, $class); #Create the ars object
    
@@ -470,7 +470,7 @@ $loadARS = sub{
 		open(my $fh_ars,"<",$ars_file) or die "CANT OPEN FILE $! $0";
 		while(<$fh_ars>) {
 			chomp;
-			
+
 			next if $_ =~ /^#/;
 	        my($s_loc,$s_allele_list,$s_G_group) = split(/\;/,$_);
 
@@ -488,8 +488,6 @@ $loadARS = sub{
 				next unless $allele=~/\S/;
 				my $p_res = who2p($s_loc.$allele);
 				my $g_res = who2G($s_loc.$allele);
-
-
 
 				$self->{ARS}->{$db_version}->{G}->{$g_res}  = $s_loc.$s_G_group;
 				$self->{ARS}->{$db_version}->{G}->{$p_res}  = $s_loc.$s_G_group;
