@@ -11,7 +11,7 @@ WriteMakefile(
     NAME                => 'ARS_Client',
     AUTHOR              => q{Mike Halagan <mhalagan@nmdp.org>},
     VERSION_FROM        => 'lib/ARS_Client.pm',
-    ABSTRACT            => 'ARS Client',
+    ABSTRACT            => 'ARS Clients',
     ($eumm_version >= 6.3001
       ? ('LICENSE'=> 'perl')
       : ()),
@@ -22,5 +22,5 @@ WriteMakefile(
         'Dancer'     => 1.3134,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
-    clean               => { FILES => 'ARS_Client-*' },
+    clean               => { FILES => 'ARS_Clients-*' },
 );

@@ -53,7 +53,7 @@
 =head1 SUBROUTINES
 
 =cut
-package ARS_Client;
+package Validate_Client;
 use strict;
 use warnings;
 
@@ -68,27 +68,28 @@ my $service_url = 'http://localhost:3000';
 
 	
 =cut
-sub redux{
+sub validate{
 
-	my($s_redux_type,$s_db_version,$s_glstring) = @_;
+	my($s_allele,$s_db_version) = @_;
 
 	my $client = REST::Client->new({
 			host    => $service_url,
 		});
 	$client->addHeader('Accept', 'application/json');
 
-	#my $url = '/api/v1/?detailRace=' . $detail_race . "&ethnicity=" . $ethnicity;
+	print STDERR $s_allele,"\t",$s_db_version,"\n";
 
-	my $request = '?arsType='.$s_redux_type."&dbversion=".$s_db_version."&glstring=".$s_glstring;
+	my $request = '?allele='.$s_allele."&dbversion=".$s_db_version;
+
 	# List of haplotypes based on the first population
-	$client->GET('/api/v1/redux' . $request);
+	$client->GET('/api/v1/validate' . $request);
 
 	my $json_response = $client->responseContent;
 	my $response = JSON::from_json($json_response);
 
-	my $ars_gl = $response->{glstring};
+	my $b_valid = $response->{valid};
 
-	return $ars_gl;
+	return $b_valid;
 
 }
 
@@ -96,12 +97,12 @@ sub redux{
 
 	
 =cut
-sub redux_cached{
+sub validate_cached{
 
-	my($s_redux_type,$s_db_version,$s_glstring) = @_;
+	my($s_allele,$s_db_version) = @_;
 
-	return $h_cache{$s_redux_type}{$s_db_version}{$s_glstring}
-		if defined $h_cache{$s_redux_type}{$s_db_version}{$s_glstring};
+	return $h_cache{$s_allele}{$s_db_version}
+		if defined $h_cache{$s_allele}{$s_db_version};
 
 	my $client = REST::Client->new({
 			host    => $service_url,
@@ -110,16 +111,17 @@ sub redux_cached{
 
 	#my $url = '/api/v1/?detailRace=' . $detail_race . "&ethnicity=" . $ethnicity;
 
-	my $request = '?arsType='.$s_redux_type."&dbversion=".$s_db_version."&glstring=".$s_glstring;
+	my $request = '?allele='.$s_allele."&dbversion=".$s_db_version;
+
 	# List of haplotypes based on the first population
-	$client->GET('/api/v1/redux' . $request);
+	$client->GET('/api/v1/validate' . $request);
 
 	my $json_response = $client->responseContent;
 	my $response = JSON::from_json($json_response);
 
-	my $ars_gl = $response->{glstring};
+	my $b_valid = $response->{valid};
 
-    $h_cache{$s_redux_type}{$s_db_version}{$s_glstring} = $ars_gl;
+    $h_cache{$s_allele}{$s_db_version} = $b_valid;
 
 
 }

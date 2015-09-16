@@ -60,6 +60,7 @@ use ARS;
 
 our $VERSION = '0.1';
 
+
 # Initializing new ARS object
 my $ars  = new ARS();
 my %h_cached_glstrings;
@@ -73,8 +74,9 @@ my %h_valid_loci = (
 );
 
 my %h_client_zips = (
-	"perl-ars-client-v1.0.0.zip" => '/downloads/perl-ars-client-v1.0.0.zip',
-	"perl-ars-client-v1.0.0.tar.gz" => '/downloads/perl-ars-client-v1.0.0.tar.gz'
+	"perl-ars-client-v1.0.0.zip"    => '/downloads/perl-ars-client-v1.0.0.zip',
+	"perl-ars-client-v1.0.0.tar.gz" => '/downloads/perl-ars-client-v1.0.0.tar.gz',
+	"ars_file"                      => '/downloads/ars_redux.txt'
 );
 
 =head2 index
@@ -134,6 +136,7 @@ get '/clients' => sub {
 get '/download' => sub {
 
 	my $client_type = params->{type};
+	$client_type = defined $client_type ? $client_type : "ars_file";
 
 	if(defined $h_client_zips{$client_type}){
     	return send_file($h_client_zips{$client_type});
@@ -143,7 +146,12 @@ get '/download' => sub {
 		}
 	}
 
-	 redirect '/clients';
+	if($client_type eq "ars_file"){
+		redirect '/';
+	}else{
+		redirect '/clients';
+	}
+	
 
 };
 
@@ -157,50 +165,59 @@ post '/reduxfile' => sub {
  	my $filename = $file->filename;
 
     # then you can do several things with that file
-    my $working = `pwd`;chomp($working);
-    my $dir     = $working."/".$filename;
+    my $working  = `pwd`;chomp($working);
+    my $dir      = $working."/".$filename;
+    my $out_file = $working."/public/downloads/ars_redux.txt";
 
     $file->copy_to("$dir");
-    my $fh       = $file->file_handle;
-    my $content  = $file->content;
-    
+    my $fh        = $file->file_handle;
     my $arsType   = params->{'arsType'};
 	my $dbversion = params->{'dbversion'};
-	$dbversion =~ s/\.//g;
+	$dbversion    =~ s/\.//g;
 
-	my %h_glstrings;
+	my @a_data;
 	if(-e $dir){
-
-
+		my $cnt = 0;
+		open(my $fh_out,">",$out_file) or die "CANT OPEN FILE $! $0";
 	    open($fh,"<",$dir) or die "CANT OPEN FILE $! $0";
 	    while(<$fh>){
 	    	chomp;
-	    	my $s_error = isValid($_);
-
+	    	my $s_error = validGlstring($_,$dbversion);
 	    	if(defined $s_error){
-	    		$h_glstrings{$_} = $s_error;
+	    		print $fh_out join(",",$cnt,$_,$s_error),"\n";
+    			push @a_data, {
+		          reduced  => $s_error,			     	
+		          glstring => $_,
+		          count    => $cnt
+		    	};
 	    	}else{
 	    		
-	    		my $s_ars_glstring = $ars->redux_mark($_,$dbversion,$arsType);
+	    		my $s_ars_marked   = $ars->redux_mark($_,$dbversion,$arsType);
+	    		my $s_ars_glstring = $ars->redux($_,$dbversion,$arsType);
 
-	    		$s_ars_glstring = join("\n",unpack("(A164)*",$s_ars_glstring))
-					if(length($s_ars_glstring)  > 164);
+	    		$s_ars_marked = join("\n",unpack("(A164)*",$s_ars_marked))
+					if(length($s_ars_marked)  > 164);
 
-	    		$h_glstrings{$_} = $s_ars_glstring;
+			    push @a_data, {
+			          reduced  => $s_ars_marked,		
+			          glstring => $_,
+			          count    => $cnt
+			     };
+	    		print $fh_out join(",",$cnt,$_,$s_ars_glstring),"\n";
 	    	}
+	    	$cnt++;
 	    }
 	    close $fh;
 	}else{
-
 		template 'index', {
 	        'error_glstring'  => $dir,
 	        'error'           => "File Does not exist!"	                
 	   };
-
 	}
 
 	template 'index', {
-        'reduced_glstring'  => \%h_glstrings
+        'reduced_glstring'  => \@a_data,
+        'download'          => "ars_file"
    	};
 
 };
@@ -218,8 +235,9 @@ get '/redux' => sub {
 
 	$dbversion =~ s/\.//g;
 
-	my $s_error = isValid($glstring);
+	my $s_error = validGlstring($glstring,$dbversion);
 
+	my @a_data;
 	if(!defined $s_error){
 		my $s_glstring = $ars->redux_mark($glstring,$dbversion,$arsType);
 
@@ -230,25 +248,29 @@ get '/redux' => sub {
 			$glstring => $s_glstring
 		);
 
+		push @a_data, {
+	          reduced  => $s_glstring,			     	
+	          glstring => $glstring,
+	          count => 0
+	    };
+
 	   template 'index', {
-	        'reduced_glstring'  => \%h_glstrings
+	        'reduced_glstring'  => \@a_data
 	   };
 
 	}else{
-
 		template 'index', {
 	        'error_glstring'  => $glstring,
 	        'error'           => $s_error	                
 	   };
-
 	}
-	
+		
 
 };
 
 
 
-=head2 API Call
+=head2 redux API Call
 
 	
 =cut
@@ -259,11 +281,11 @@ get '/api/v1/redux' => sub {
     my $glstring  = param('glstring');
 
     $glstring   =~ s/ /\+/g;
-    $dbversion =~ s/\.//g;
+    $dbversion  =~ s/\.//g;
     $glstring   =~ /^(\D+\d{0,1})\*/;
     
     my $s_locus = $1;
-	my $s_error = isValid($glstring);
+	my $s_error = validGlstring($glstring,$dbversion);
     
     if(defined $s_error){
     	return {
@@ -289,16 +311,36 @@ get '/api/v1/redux' => sub {
 };
 
 
-=head2 isValid
+=head2 Validation API Call
 
-        Title:    isValid
-        Usage:    isValid($glstring);
+	
+=cut
+get '/api/v1/validate' => sub {
+
+    my $dbversion = param('dbversion');
+    my $allele    = param('allele');
+    $dbversion =~ s/\.//g;
+
+	my $validation = $ars->validAllele($allele,$dbversion);
+    my $b_valid    = $validation ? "TRUE" : "FALSE";	
+    return {
+        allele     => $allele,
+        dbversion  => $dbversion,
+        valid      => $b_valid 
+    };
+
+};
+
+=head2 valid
+
+        Title:    valid
+        Usage:    valid($glstring);
         Function: 
 	
 =cut
-sub isValid{
+sub validGlstring{
 
-	my($glstring) = shift;
+	my($glstring,$dbv) = @_;
 
 	return $h_cached_glstrings{$glstring}
 		if(defined $h_cached_glstrings{$glstring});
@@ -328,8 +370,49 @@ sub isValid{
 		}
 	}
 
+	my $allele_validation = validAllele($glstring,$dbv);
+	if(defined $allele_validation){
+		$h_cached_glstrings{$glstring} = "Invalid alleles! ".$allele_validation;
+		return "Invalid alleles! ".$allele_validation;
+	}
+
 	return;
 
 }
+
+=head2 validAllele
+
+        Title:    validAllele
+        Usage:    validAllele($glstring);
+        Function: 
+	
+=cut
+sub validAllele{
+
+	my($glstring,$dbv) = @_;
+
+	my %h_invalid;
+	my $isInvalid = 0;
+	map{ my $gl1 = $_; map{ my $gl2 = $_; map{ my $gl3 = $_;map{ my $gl4 = $_; 
+	map{
+		if(!$ars->isAC($_)){
+			my $b_valid = $ars->validAllele($_,$dbv);
+			if(!$b_valid){
+				$isInvalid = 1;
+				$h_invalid{$_}++;
+			}
+		}
+	} split(/\//,$gl4); } split(/\~/,$gl3); } split(/\+/,$gl2)
+	} split(/\|/,$gl1); } split(/\^/, $glstring);
+
+	if($isInvalid){
+		return join("/",keys %h_invalid);
+	}else{
+		return;
+	}
+
+
+}
+
 
 true;

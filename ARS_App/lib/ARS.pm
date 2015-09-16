@@ -228,7 +228,7 @@ sub redux {
 	return join '/', dedup(map($self->redux($_,$dbv,$s_redux_type), (split /\//, $glstring)))
 		if ($glstring=~/\//);
 	return join '/',dedup(map($self->redux($_,$dbv,$s_redux_type),(split /\//,$self->$ac2gl($glstring))))
-		if isAC($glstring);
+		if $self->isAC($glstring);
 
 	if($glstring !~ /\S/ || $glstring !~ /\d{2,3}:(\d{2,3}|\D{2,6})/){
 		print STDERR "Not a vaild allele! $! $glstring\n";
@@ -261,7 +261,7 @@ sub redux_mark {
 	return join '/', dedup(map($self->redux_mark($_,$dbv,$s_redux_type), (split /\//, $glstring)))
 		if ($glstring=~/\//);
 	return join '/',dedup(map($self->redux_mark($_,$dbv,$s_redux_type),(split /\//,$self->$ac2gl($glstring))))
-		if isAC($glstring);
+		if $self->isAC($glstring);
 	
 	if($glstring !~ /\S/ || $glstring !~ /\d{2,3}:(\d{2,3}|\D{2,6})/){
 		print STDERR "Not a vaild allele! $! $glstring\n";
@@ -318,8 +318,8 @@ sub who2p{
 #     output:		
 ##############################################################################
 sub isAC{
-	my $allele   = shift();
-	if($allele =~ /\d\d\D{2,4}/ || $allele =~ /\d\d:\D{2,4}/){
+	my ($self,$allele)   = @_;
+	if($allele =~ /\d\d\D{2,6}/ || $allele =~ /\d\d:\D{2,6}/){
 		return 1;
 	}else{ return 0;}
 }
@@ -346,6 +346,20 @@ sub getArsGroups{
 
 	return \%h_groups;
 
+}
+##############################################################################
+#     function: 	
+#     description: 
+#     input: 		
+#     output:		
+##############################################################################
+sub validAllele {
+	my($self,$s_allele,$s_dbversion) = @_;
+	if(defined $self->{VALID}->{$s_dbversion}->{$s_allele}){
+		return 1;
+	}else{
+		return 0;
+	}
 }
 ##############################################################################
 #     function: 	
@@ -439,6 +453,7 @@ $isArs = sub{
 	}
 
 };
+
 ##############################################################################
 #     function: 	$loadARS
 #     description: 	
@@ -498,10 +513,26 @@ $loadARS = sub{
 
 				$self->{GROUPS}->{$db_version}->{G}->{$s_loc.$s_G_group}++;
 				$self->{GROUPS}->{$db_version}->{g}->{$s_loc.$g_level_ars}++;
-				$self->{GROUPS}->{$db_version}->{P}->{$s_loc.$p_level_ars}++;						
-
+				$self->{GROUPS}->{$db_version}->{P}->{$s_loc.$p_level_ars}++;	
+		
 			}
 		}
+		close $fh_ars;
+
+		my $valid_file = $s_wmda_dir."/hla_nom.txt";
+		open(my $fh_valid,"<",$valid_file) or die "CANT OPEN FILE $! $0";
+		while(<$fh_valid>) {
+			chomp;
+			next unless $_ =~ /\*/;
+			#DRB1*;13:11:01;19931107;;;
+			my($s_loc,$s_allele,$date1,$deleted_date,@a) = split(/;/,$_);
+			next if defined $deleted_date && $deleted_date !~ /\S/;
+			$self->{VALID}->{$db_version}->{$s_loc.$s_allele}++;
+			$self->{VALID}->{$db_version}->{who2p($s_loc.$s_allele)}++;
+			$self->{VALID}->{$db_version}->{who2G($s_loc.$s_allele)}++;
+		}
+		close $fh_valid;
+
 		print STDERR "Loading ARS File: $s_branch\n" if $self->{verbose};
 
 	}

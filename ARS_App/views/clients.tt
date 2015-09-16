@@ -36,7 +36,7 @@
 		</button>
 	</dd>
 	<dd>
-	  	<button data-toggle="modal" data-target="#myModal" style="background-color: Transparent; background-repeat:no-repeat;border: none;cursor:pointer; overflow: hidden;padding:0 0 0 0;">
+	  <button data-toggle="modal" data-target="#myModal" style="background-color: Transparent; background-repeat:no-repeat;border: none;cursor:pointer; overflow: hidden;padding:0 0 0 0;">
 	  		<a>perl-ars-client-v1.0.0.zip</a>
 		</button>
 	</dd>
@@ -109,10 +109,9 @@
 			        </select>
 			    </div>
 			</div>
-
-		  	<div style="margin-top:60px;display:none;text-align:center;" id="term_alert" class="alert alert-danger" role="alert"><b>You must accept terms before downloading</b></div>
-	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	        <button type="button" class="btn btn-primary" onClick="downloadClient()">Download</button>
+        <div style="margin-top:60px;display:none;text-align:center;" id="term_alert" class="alert alert-danger" role="alert"><b>You must accept terms before downloading</b></div>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onClick="downloadClient()">Download</button>
 	    </form> 
       </div>
     </div>
