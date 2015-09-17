@@ -22,6 +22,7 @@
 
 =head1 LICENSE
 
+    pipeline  Consensus assembly and allele interpretation pipeline.
     Copyright (c) 2015 National Marrow Donor Program (NMDP)
 
     This library is free software; you can redistribute it and/or modify it
@@ -70,32 +71,15 @@ BEGIN{
 
 
 }
-use ARS_Client;
+use Validate_Client;
 
 
-# Loop through all of the ARS types
-my @a_redux_types = ("g","G","P");
-foreach my $s_redux_type (@a_redux_types){
+my $s_db_version = shift @ARGV or die "No db version provided!\n";
+my $s_allele     = shift @ARGV or die "No glstring provided!\n";
+my $b_valid      = Validate_Client::validate($s_allele,$s_db_version);
 
-    my $s_gl = "A*01:01";
-    my $s_ars_gl = ARS_Client::redux_cached($s_redux_type,"3.20.0",$s_gl);
-    print "ARS Redux Type: ",$s_redux_type,"\tGL Before: ",$s_gl,"\tReduced Glstring: ",$s_ars_gl,"\n";
-    
+print "Valid: ",$s_db_version,"\t",$s_allele,"\t",$b_valid,"\n";
 
-    $s_gl = "A*01:01+A*01:01";
-    my $s_ars_gl2 = ARS_Client::redux_cached($s_redux_type,"3.20.0",$s_gl);
-    print "ARS Redux Type: ",$s_redux_type,"\tGL Before: ",$s_gl,"\tReduced Glstring: ",$s_ars_gl2,"\n";
-
-
-    $s_gl = "A*01:01+A*01:01|A*01:01+A*01:01";
-    my $s_ars_gl3 = ARS_Client::redux_cached($s_redux_type,"3.20.0",$s_gl);
-    print "ARS Redux Type: ",$s_redux_type,"\tGL Before: ",$s_gl,"\tReduced Glstring: ",$s_ars_gl3,"\n";
-
-    $s_gl = "A*02:01/A*02:02+A*01:01/A*01:02/A*01:03";
-    my $s_ars_gl4 = ARS_Client::redux_cached($s_redux_type,"3.20.0",$s_gl);
-    print "ARS Redux Type: ",$s_redux_type,"\tGL Before: ",$s_gl,"\tReduced Glstring: ",$s_ars_gl4,"\n";
-
-}
 
 
 exit 1;

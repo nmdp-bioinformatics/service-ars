@@ -55,16 +55,34 @@
 use strict;
 use warnings;
 use Data::Dumper;
+BEGIN{
+
+    my $working    = `pwd`;chomp($working);
+    if($working !~ /\/t/){
+        my $lib = $working."/lib";
+        push(@INC,$lib);
+    }else{
+        $working =~ s/\/t//;
+        my $lib = $working."/lib";
+        push(@INC,$lib);
+    }
+    push(@INC,"../lib/");
+
+    # Find where the data directory is located
+    my $working  = `pwd`;chomp($working);
+    my $data_dir = `perldoc -l ARS_Client.pm`;chomp($data_dir);
+    $data_dir    =~ s/\.pm// if(defined $data_dir && $data_dir =~ /\S/);
+    $data_dir    = (defined $data_dir && $data_dir =~ /\S/ && $data_dir ne "lib/") ?
+        $data_dir."/Data" : $working."/lib/Scenario/NMDP/Cord/Data";
+
+}
 use ARS_Client;
 
-
 # Loop through all of the ARS types
-
 my $s_redux_type = shift @ARGV or die "No ARS Type provided!\n";
 my $s_db_version = shift @ARGV or die "No db version provided!\n";
 my $s_glstring   = shift @ARGV or die "No glstring provided!\n";
-
-my $s_ars_gl = ARS_Client::redux($s_redux_type,$s_db_version,$s_glstring);
+my $s_ars_gl     = ARS_Client::redux($s_redux_type,$s_db_version,$s_glstring);
 
 print "ARS Redux Type: ",$s_redux_type,"\tGL Before: ",$s_glstring,"\tReduced Glstring: ",$s_ars_gl,"\n";
 

@@ -9,7 +9,7 @@ $eumm_version =~ s/_//;
 
 WriteMakefile(
     NAME                => 'ARS_App',
-    AUTHOR              => q{Michael Halagan <youremail@example.com>},
+    AUTHOR              => q{Michael Halagan <mhalagan@nmdp.org>},
     VERSION_FROM        => 'lib/ARS_App.pm',
     ABSTRACT            => 'ARS reduction service',
     ($eumm_version >= 6.3001

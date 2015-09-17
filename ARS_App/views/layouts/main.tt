@@ -72,6 +72,9 @@
           redux.method = "POST";
         }   
     }
+    function downloadClient(){
+        document.getElementById('submit_modal').submit();
+    }
     </script>
 
     <script>
