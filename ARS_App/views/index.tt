@@ -85,6 +85,11 @@
     <% END %>
 </header>
 
+<div class="center_div" style="margin-top:-10px;margin-bottom:15px;">
+  <button  type="button" onclick="highlightArsGroups()" class="btn btn-default btn-group-xs">Highlight ARS Groups</button>
+</div>
+
+
 <% IF error.defined %>
   <ul class="list-group">
     <div class="panel panel-danger">
@@ -119,9 +124,6 @@
           <% END %>
         </tbody>
         </table>
-    </div>
-    <div style="text-align:left;"> 
-      <button onclick="highlightArsGroups()" class="btn btn-default btn-group-xs">Highlight ARS Groups</button>
     </div>
   </div>
 <% END %>

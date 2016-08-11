@@ -61,7 +61,18 @@
         });
     });   
     </script>
-
+    <script>
+      function highlightArsGroups(){
+        $('.highlightGroup').each(function(i) {
+            
+            if(this.style.backgroundColor !== "yellow"){
+              this.style.backgroundColor = "yellow";
+            }else{
+              this.style.backgroundColor = "";
+            }
+        });
+      }
+    </script>
     <script>
     function getAction(){
         var x = document.getElementById("myFile");
@@ -81,17 +92,7 @@
     }
     </script>
 
-    <script>
-      function highlightArsGroups(){
-        $('.highlightGroup').each(function(i) {
-            if(this.style.backgroundColor !== "yellow"){
-              this.style.backgroundColor = "yellow";
-            }else{
-              this.style.backgroundColor = "";
-            }
-        });
-      }
-    </script>
+
 
     <style>
         .footer {
@@ -215,6 +216,8 @@
             <p id="copyright">Copyright © 1996-2015 National Marrow Donor
               Program. All Rights Reserved.</p>
           </div>
+
+
           </footer>
 
     </div>
