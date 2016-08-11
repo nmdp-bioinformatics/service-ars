@@ -161,6 +161,7 @@ my $working    = `pwd`;chomp($working);
 my $s_ars_dir  = $working."/ARS";
 my $s_wmda_dir = $working."/HLA-WMDA";
 
+
 ##########################
 ###   public methods   ###
 ##########################
@@ -180,7 +181,7 @@ sub new{
     $self->{acurl}   = shift();
 
     $self->{verbose} = !defined $self->{verbose} ? 0 : $self->{verbose};
-	$self->{acurl}   = !defined $self->{acurl}   ? "http://emmes-dev.nmdp.org:8080/ac/" : $self->{acurl};
+	$self->{acurl}   = !defined $self->{acurl}   ? "http://devgenomicservices1.nmdp.org/mac" : $self->{acurl};
 
 	bless($self, $class); #Create the ars object
    
@@ -227,12 +228,12 @@ sub redux {
 		if ($glstring=~/\~/);	
 	return join '/', dedup(map($self->redux($_,$dbv,$s_redux_type), (split /\//, $glstring)))
 		if ($glstring=~/\//);
-	return join '/',dedup(map($self->redux($_,$dbv,$s_redux_type),(split /\//,$self->$ac2gl($glstring))))
-		if $self->isAC($glstring);
+	#return join '/',dedup(map($self->redux($_,$dbv,$s_redux_type),(split /\//,$self->$ac2gl($glstring))))
+	#	if $self->isAC($glstring);
 
 	if($glstring !~ /\S/ || $glstring !~ /\d{2,3}:(\d{2,3}|\D{2,6})/){
 		print STDERR "Not a vaild allele! $! $glstring\n";
-		return ""; 
+		return; 
 	}
 
 	$glstring = $self->$ARS_redux($glstring,$dbv,$s_redux_type);
@@ -265,7 +266,7 @@ sub redux_mark {
 	
 	if($glstring !~ /\S/ || $glstring !~ /\d{2,3}:(\d{2,3}|\D{2,6})/){
 		print STDERR "Not a vaild allele! $! $glstring\n";
-		return ""; 
+		return; 
 	}
 
 	$glstring = $self->$ARS_redux($glstring,$dbv,$s_redux_type);
@@ -353,7 +354,7 @@ sub getArsGroups{
 #     input: 		
 #     output:		
 ##############################################################################
-sub validAllele {
+sub validateAllele {
 	my($self,$s_allele,$s_dbversion) = @_;
 	if(defined $self->{VALID}->{$s_dbversion}->{$s_allele}){
 		return 1;
@@ -409,6 +410,32 @@ sub cnt_grps{
 	my $grp_cnt = keys %g_grps;
 	return 1 if $grp_cnt ==1;
 	
+}
+##############################################################################
+#     function: 	cnt_grps
+#     description: 	
+#     input: 		
+#     output:		
+##############################################################################
+sub isArsGroup{
+
+	my($self,$typing,$dbv) = @_;
+
+	return 1 if($self->$isArs($typing,$dbv,"g") || $self->$isArs($typing,$dbv,"G"));
+	return 0;
+
+}
+##############################################################################
+#     function: 	cnt_grps
+#     description: 	
+#     input: 		
+#     output:		
+##############################################################################
+sub getDBs{
+
+	my $self = shift;;
+
+	return $self->{dbs};
 }
 
 ##########################
@@ -482,6 +509,8 @@ $loadARS = sub{
     	$s_branch      =~ /(\d{4})$/;
     	my $db_version = $1;
 
+    	$self->{dbs}->{$db_version}++;
+    	
 		open(my $fh_ars,"<",$ars_file) or die "CANT OPEN FILE $! $0";
 		while(<$fh_ars>) {
 			chomp;
@@ -491,6 +520,7 @@ $loadARS = sub{
 
 	        my $p_level_ars = (join ':', (split /:/, $s_G_group)[0..1]);
 	        my $g_level_ars = $p_level_ars."g";
+	        $p_level_ars = $p_level_ars."P";
 
 	        next unless defined $s_G_group && $s_G_group =~ /\S/;
 	        my @a_alleles = split(/\//,$s_allele_list);
@@ -564,8 +594,9 @@ $ac2gl = sub{
     $ua->agent("AlleleCodeClient/0.1");
     my @allele_list_list;my @ret;
 
-	my $url = $self->{acurl}."api/decode?typing=$loc*$typ";
+	my $url = $self->{acurl}."/api/decode?typing=$loc*$typ";
 
+	print STDERR $url,"\n";
     my $response = $ua->request(new HTTP::Request("GET", $url));
     my $code = $response->code;
     my $content = $response->content;
@@ -578,7 +609,7 @@ $ac2gl = sub{
         # Request syntax was bad, or the typing was bad
         # print error and keep original typing.
         print STDERR "Bad request: $content\n\turl:  $url\n";
-        push @ret, ("$loc*$typ");
+        push @ret, ("INVALID");
     } else {
         die "System error: code=$code $content\n";
     }

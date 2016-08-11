@@ -11,70 +11,69 @@
 -->
 
 <!-- Jumbotron Header -->
-<legend style="text-align:left;margin-top:25px;">ARS Reduction Service</legend>
-<header class="jumbotron hero-spacer" style="margin-top:5px;">
-  <form id="reduxForm" enctype="multipart/form-data">
+<legend class="col-center-block" style="text-align:center;margin-top:25px;width:65%;">ARS Reduction Service</legend>
+<header class="jumbotron hero-spacer col-center-block"  style="margin-top:5px;width:65%;margin-bottom:40px;" >
+  <form id="reduxForm" enctype="multipart/form-data" style="margin-right:-10px;">
+  
+  <div class="center_div">
+    <div class="row" style="margin-bottom:10px;">
+      <div class="col-sm-5" style="margin-right:1px;width:45%">
+        <div class="input-group input-group-sm" >
+          <span class="input-group-addon" style="background-color:#f9f6f6;">ARS Type</span>
+            <select  class="form-control" class="selectpicker"  data-max-options="1" name="arsType">
+                <option>g</option>
+                <option>G</option>
+                <option>P</option>
+            </select>
+        </div><!-- /input-group -->
+      </div><!-- /.col--6 -->
 
-  <div class="row" style="margin-bottom:10px;">
-    <div class="col-sm-3" style="margin-right:1px;">
-      <div class="input-group input-group-sm" >
-        <span class="input-group-addon">ARS Type</span>
-          <select class="form-control" name="arsType">
-              <option>g</option>
-              <option>G</option>
-              <option>P</option>
-          </select>
-      </div><!-- /input-group -->
-    </div><!-- /.col--6 -->
-    <div class="col-sm-3" >
-      <div class="input-group input-group-sm" >
-        <span class="input-group-addon">Database Version</span>
-          <select class="form-control" name="dbversion">
-              <option>3.21.0</option>
-              <option>3.20.0</option>
-              <option>3.19.0</option>
-              <option>3.18.0</option>
-              <option>3.17.0</option>
-              <option>3.16.0</option>
-              <option>3.15.0</option>
-              <option>3.14.0</option>   
-              <option>3.13.0</option>
-              <option>3.12.0</option>
-              <option>3.11.0</option>
-              <option>3.10.0</option>
-              <option>3.09.0</option>
-              <option>3.08.0</option>
-              <option>3.07.0</option>
-              <option>3.06.0</option>
-              <option>3.05.0</option>
-              <option>3.04.0</option>
-              <option>3.03.0</option>
-              <option>3.02.0</option> 
-              <option>3.01.0</option>
-              <option>3.0.0</option>                     
-          </select>
-      </div><!-- /input-group -->
-    </div><!-- /.col--6 -->
 
-      <a href="#" data-toggle="tooltip" 
-      title="IMGT/HLA Database Version &#13; & Antigen Recognition Site" style="text-decoration:none;color:black;margin-top:-30px;">
-        <span class="glyphicon glyphicon-question-sign" style="margin-top:5px;margin-left:-2px;"></span>
-      </a>
+      <div class="col-sm-6" style="margin-left:-8px;width:55%;">
+        <div class="input-group input-group-sm" >
+            <span class="input-group-addon" style="background-color:#f9f6f6;">Database Version</span>
+              <select class="form-control" class="selectpicker"  data-max-options="1" name="dbversion">
+                  <option>3.21.0</option>
+                  <option>3.20.0</option>
+                  <option>3.19.0</option>
+                  <option>3.18.0</option>
+                  <option>3.17.0</option>
+                  <option>3.16.0</option>
+                  <option>3.15.0</option>
+                  <option>3.14.0</option>   
+                  <option>3.13.0</option>
+                  <option>3.12.0</option>
+                  <option>3.11.0</option>
+                  <option>3.10.0</option>
+                  <option>3.09.0</option>
+                  <option>3.08.0</option>
+                  <option>3.07.0</option>
+                  <option>3.06.0</option>
+                  <option>3.05.0</option>
+                  <option>3.04.0</option>
+                  <option>3.03.0</option>
+                  <option>3.02.0</option> 
+                  <option>3.01.0</option>
+                  <option>3.0.0</option>                     
+              </select>
+          </div><!-- /input-group -->
+        </div><!-- /.col--6 -->
 
-  </div><!-- /.row -->
 
-    <div class="input-group input-group-sm" style="margin-bottom:10px;">
-      <span class="input-group-addon" id="sizing-addon3">Glstring</span>
+    </div><!-- /.row -->
+  
+    <div class="input-group input-group-sm col-sm-10" style="margin-bottom:10px;width:99%;">
+      <span class="input-group-addon" style="background-color:#f9f6f6;" id="sizing-addon3">Glstring</span>
       <input type="text" class="form-control" placeholder="A*01:01/A*01:02+A*01:03/A*02:01" name="glstring" aria-describedby="sizing-addon3" >
     </div>
 
       <div id="Demo-BS">
-        <input type="submit" id="form_button" class="btn btn-primary btn-large" onclick="getAction()"></input>
+        <input type="submit" id="form_button" class="btn btn-primary btn-sm" onclick="getAction()"></input>
         <div  style="margin-left:83px;margin-top:-27px;">
           <input id="myFile" type="file" name="filename"></input>
         </div>
       </div>
-
+  </div>
   </form>
     <% IF download.defined %>
       <form id="submit_modal" action="<% request.uri_base %>/download" >
@@ -85,6 +84,11 @@
       </form>
     <% END %>
 </header>
+
+<div class="center_div" style="margin-top:-10px;margin-bottom:15px;">
+  <button  type="button" onclick="highlightArsGroups()" class="btn btn-default btn-group-xs">Highlight ARS Groups</button>
+</div>
+
 
 <% IF error.defined %>
   <ul class="list-group">
@@ -99,31 +103,29 @@
   </ul>
 <% ELSIF reduced_glstring.defined %>
 
-  <div class="table-responsive">
+  <div class="center_div">
+    <div class="table-responsive" >
 
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Glstring </th>
-          <th>ARS Reduced Glstring</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% FOREACH gl IN reduced_glstring %>
+      <table class="table table-hover">
+        <thead>
           <tr>
-            <td><% gl.count %></td>
-            <td><% gl.glstring %></td>
-            <td><% gl.reduced %></td> 
+            <th>#</th>
+            <th>Glstring </th>
+            <th>ARS Reduced Glstring</th>
           </tr>
-        <% END %>
-      </tbody>
-      </table>
+        </thead>
+        <tbody>
+          <% FOREACH gl IN reduced_glstring %>
+            <tr>
+              <td><% gl.count %></td>
+              <td><% gl.glstring %></td>
+              <td><% gl.reduced %></td> 
+            </tr>
+          <% END %>
+        </tbody>
+        </table>
+    </div>
   </div>
-  <div style="text-align:left;"> 
-    <button onclick="highlightArsGroups()" class="btn btn-default btn-group-xs">Highlight ARS Groups</button>
-  </div>
-
 <% END %>
 
 
