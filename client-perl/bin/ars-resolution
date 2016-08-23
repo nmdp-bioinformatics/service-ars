@@ -1,0 +1,153 @@
+#!/usr/bin/env perl
+=head1 NAME
+
+    hla-typing-resolution
+
+=head1 SYNOPSIS
+	
+
+=head1 AUTHOR     Mike Halagan <mhalagan@nmdp.org>
+    
+    Bioinformatics Scientist
+    3001 Broadway Stree NE
+    Minneapolis, MN 55413
+    ext. 8225
+
+=head1 DESCRIPTION
+
+
+=head1 CAVEATS
+
+
+=head1 LICENSE
+
+    Copyright (c) 2015 National Marrow Donor Program (NMDP)
+
+    This library is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as published
+    by the Free Software Foundation; either version 3 of the License, or (at
+    your option) any later version.
+
+    This library is distributed in the hope that it will be useful, but WITHOUT
+    ANY WARRANTY; with out even the implied warranty of MERCHANTABILITY or
+    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+    License for more details.
+ 
+    You should have received a copy of the GNU Lesser General Public License
+    along with this library;  if not, write to the Free Software Foundation,
+    Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA.
+
+    > http://www.gnu.org/licenses/lgpl.html
+
+=head1 VERSIONS
+	
+    Version    Description              Date
+
+
+=head1 TODO
+	
+
+=head1 SUBROUTINES
+
+=cut
+use strict;    # always
+use warnings;  # or else
+use FindBin;
+use vars qw($VERSION $USAGE $script $system $perlloc $perlv $process $start_time $user $working);
+BEGIN{
+
+    $VERSION     = '0.0.0';
+    $start_time  = $^T;
+    $working     = `pwd`;chomp($working);
+   # $script 	 = `readlink -f $0`;chomp($script);
+    $system      = $^O;
+    $perlloc     = $^X;
+    $perlv       = $];
+    $process     = $$;
+    $user        = `whoami`;chomp($user);
+
+    $| = 1;
+
+    $USAGE = 
+        qq{./ars-resolution [--arsType] [--db] [--arsUrl] [--macUrl] [--genotypes] [--genomic] [--genomic]
+            -a/--arsType    em-tools jar file for running imputation             (default = $FindBin::Bin/em-tools-3.3-2015-08-05.jar)
+            -t/--db     	Threshold for what haplotypes will be loaded         (default = .000001)
+            -p/--arsUrl     List of populations haplotype frequencies to load    (default = ALL)
+            -r/--genotypes  Flag for renormalizing the imputation results or not (default = 1)
+            -r/--genomic    Format of the input file                             (default = SRTR)
+            -f/--macUrl     Directory containing all the frequencies             ( ** REQUIRED **)
+            -v/--verbose    Flag for running in verbose
+            -h/--help
+        };
+
+}
+use JSON::Parse 'json_file_to_perl';
+use Getopt::Long;
+use lib "$FindBin::Bin/../lib";
+use ARS_Client;
+
+our($s_config,$b_verbose,$help) = (undef,undef,undef);
+
+&GetOptions('config|c=s'     => \$s_config,
+			'verbose|v'      => \$b_verbose,
+            'help|h'         => \$help,
+            );
+# --help
+if($help){
+	exec('perldoc',$0);
+	die;
+}
+
+my $rh_params = json_file_to_perl($s_config);
+
+my @a_subjects;
+while(<STDIN>){
+	chomp;
+	my($id,@a_typing) = split(/,/,$_);
+
+	my @a_locus_typing;
+	for(my $i=0;$i<=$#a_typing;$i+=2){
+		my $j = $i+1;
+		$a_typing[$j] = $a_typing[$i] if(!defined $a_typing[$j] || $a_typing[$j] !~ /\S/);
+		$a_typing[$i] = $a_typing[$j] if(!defined $a_typing[$i] || $a_typing[$i] !~ /\S/);
+		next if !defined $a_typing[$i];
+		push(@a_locus_typing,join("+",$a_typing[$i],$a_typing[$j]));
+	}
+	push(@a_subjects,{
+		typing => \@a_locus_typing,
+		SubjectID => $id
+	});
+}
+
+my $rh_redux_subjects = ARS_Client::reduxSubjects($rh_params,\@a_subjects);
+
+# Print our ARS reduced typings
+foreach my $o_subject (@{$rh_redux_subjects->{Subjects}}){
+	print join(",",$o_subject->{SubjectID},join(",",@{$o_subject->{typing}})),"\n";
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
