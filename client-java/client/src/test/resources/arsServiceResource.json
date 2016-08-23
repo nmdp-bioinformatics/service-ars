@@ -1,0 +1,7 @@
+{  
+   "arsFile":"hla_nom_g.txt",
+   "dbversion":"3.20.0",
+   "arsUrl":"http://localhost:3000/api/v1/reduxSubjects",
+   "macUrl":"http://devgenomicservices1.nmdp.org/mac",
+   "arsType":"g"
+}

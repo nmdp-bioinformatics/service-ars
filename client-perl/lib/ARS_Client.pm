@@ -56,90 +56,43 @@
 package ARS_Client;
 use strict;
 use warnings;
-
+use Data::Dumper;
 use REST::Client;
 use JSON;
 
-
-my %h_cache;
-my $service_url = 'http://localhost:3000';
 
 =head2 redux
 
 	
 =cut
-sub redux{
+sub reduxSubjects{
 
-	my($s_redux_type,$s_db_version,$s_glstring) = @_;
+	my($rh_params,$rh_subjects) = @_;
+
+	my $request = {
+		%$rh_params,
+		Subjects => \@$rh_subjects
+	};
+	my $json_request = JSON::to_json($request);
 
 	my $client = REST::Client->new({
-			host    => $service_url,
+			host    => $$rh_params{'arsUrl'},
 		});
+	$client->addHeader('Content-Type', 'application/json;charset=UTF-8');
 	$client->addHeader('Accept', 'application/json');
 
-	#my $url = '/api/v1/?detailRace=' . $detail_race . "&ethnicity=" . $ethnicity;
-
-	my $request = '?arsType='.$s_redux_type."&dbversion=".$s_db_version."&glstring=".$s_glstring;
 	# List of haplotypes based on the first population
-	$client->GET('/api/v1/redux' . $request);
+	$client->POST('/api/v1/reduxSubjects', $json_request, {});
 
 	my $json_response = $client->responseContent;
 	my $response = JSON::from_json($json_response);
 
-	my $ars_gl = $response->{glstring};
-
-	return $ars_gl;
+	return $response;
 
 }
 
-=head2 redux_cached
-
-	
-=cut
-sub redux_cached{
-
-	my($s_redux_type,$s_db_version,$s_glstring) = @_;
-
-	return $h_cache{$s_redux_type}{$s_db_version}{$s_glstring}
-		if defined $h_cache{$s_redux_type}{$s_db_version}{$s_glstring};
-
-	my $client = REST::Client->new({
-			host    => $service_url,
-		});
-	$client->addHeader('Accept', 'application/json');
-
-	#my $url = '/api/v1/?detailRace=' . $detail_race . "&ethnicity=" . $ethnicity;
-
-	my $request = '?arsType='.$s_redux_type."&dbversion=".$s_db_version."&glstring=".$s_glstring;
-	# List of haplotypes based on the first population
-	$client->GET('/api/v1/redux' . $request);
-
-	my $json_response = $client->responseContent;
-	my $response = JSON::from_json($json_response);
-
-	my $ars_gl = $response->{glstring};
-
-    $h_cache{$s_redux_type}{$s_db_version}{$s_glstring} = $ars_gl;
 
 
-}
-
-=head2 clear_cache
-
-	
-=cut
-sub clear_cache{
-	%h_cache = ();
-}
-
-
-=head2 set_url
-
-	
-=cut
-sub set_service_url{
-	$service_url = shift;
-}
 
 
 1;

@@ -11,83 +11,117 @@
 -->
 
 <!-- Jumbotron Header -->
-<legend class="col-center-block" style="text-align:center;margin-top:25px;width:65%;">ARS Reduction Service</legend>
-<header class="jumbotron hero-spacer col-center-block"  style="margin-top:5px;width:65%;margin-bottom:40px;" >
-  <form id="reduxForm" enctype="multipart/form-data" style="margin-right:-10px;">
-  
-  <div class="center_div">
-    <div class="row" style="margin-bottom:10px;">
-      <div class="col-sm-5" style="margin-right:1px;width:45%">
-        <div class="input-group input-group-sm" >
-          <span class="input-group-addon" style="background-color:#f9f6f6;">ARS Type</span>
-            <select  class="form-control" class="selectpicker"  data-max-options="1" name="arsType">
-                <option>g</option>
-                <option>G</option>
-                <option>P</option>
-            </select>
-        </div><!-- /input-group -->
-      </div><!-- /.col--6 -->
+ <div style="border-style:solid;border-width:1px;border-color:black;margin-bottom:35px;margin-top:105px;box-shadow: 0px 0px 5px 0px grey;">
+          <header class="jumbotron  col-center-block" style="margin-bottom: 0px;width:100%;border-style:solid;">
+              <div class="center_div" style="font-family:Lobster;font-size: 2vw;margin-top:-30px;margin-bottom:0px;width:65%;text-align:center;">
+                  <h2 class="col-center-block" style="margin-bottom:0px;">ARS Service</h2>
+              </div>
+              <div class="h-divider center_div"></div>
+              <form id="reduxForm" enctype="multipart/form-data" style="">
+                  <div class="center_div" style="width:80%;">
+                      <div class="row" style="margin-bottom:10px;">
+                          <div class="col-md-5" style="width:25%">
+                              <div class="input-group input-group-md">
+                                  <span class="input-group-addon" style="background-color:#f9f6f6;">ARS Type</span>
+                                  <select class="form-control" class="selectpicker" data-max-options="1" name="arsType">
+                                      <option>g</option>
+                                      <option>G</option>
+                                      <option>P</option>
+                                  </select>
+                              </div>
+                              <!-- /input-group -->
+                          </div>
+                          <!-- /.col--6 -->
+                          <div class="col-md-5" style="width:40%;">
+                              <div class="input-group input-group-md">
+                                  <span class="input-group-addon" style="background-color:#f9f6f6;">Database Version</span>
+                                  <select class="form-control" class="selectpicker" data-max-options="1" name="dbversion">
+                                      <option>3.21.0</option>
+                                      <option>3.20.0</option>
+                                      <option>3.19.0</option>
+                                      <option>3.18.0</option>
+                                      <option>3.17.0</option>
+                                      <option>3.16.0</option>
+                                      <option>3.15.0</option>
+                                      <option>3.14.0</option>
+                                      <option>3.13.0</option>
+                                      <option>3.12.0</option>
+                                      <option>3.11.0</option>
+                                      <option>3.10.0</option>
+                                      <option>3.09.0</option>
+                                      <option>3.08.0</option>
+                                      <option>3.07.0</option>
+                                      <option>3.06.0</option>
+                                      <option>3.05.0</option>
+                                      <option>3.04.0</option>
+                                      <option>3.03.0</option>
+                                      <option>3.02.0</option>
+                                      <option>3.01.0</option>
+                                      <option>3.0.0</option>
+                                  </select>
+                              </div>
+                              <!-- /input-group -->
+                          </div>
+                          <div class="col-md-5" style="width:35%;">
+                              <div class="input-group input-group-md">
+                                  <span class="input-group-addon" style="background-color:#f9f6f6;">ARS File</span>
+                                  <select class="form-control" class="selectpicker" data-max-options="1" name="arsFile">
+                                      <option>hla_nom_g.txt</option>
+                                      <option>hla_nom_p.txt</option>
+                                  </select>
+                              </div>
+                              <!-- /input-group -->
+                          </div>
+                      </div>
+                      <!-- /.row -->
+                      <div class="input-group input-group-md col-md-5" style="margin-bottom:10px;width:100%;">
+                          <span class="input-group-addon" style="background-color:#f9f6f6;" id="sizing-addon3">Glstring</span>
+                          <input type="text" class="form-control" placeholder="A*01:01/A*01:02+A*01:03/A*02:01" name="glstring" aria-describedby="sizing-addon3">
+                      </div>
+                      <div id="Demo-BS">
+                          <input type="submit" id="form_button" class="btn btn-primary btn-md" onclick="getAction()"></input>
+                          <div>
+                              <input style="margin-left:83px;margin-top:-27px;" id="myFile" type="file" name="filename"></input>
+                          </div>
+                          <a style="float:right;margin-left:265px;margin-top:-20px;" href="#" onclick="more(this);">more options</a>
+                      </div>
+                      <div id="showMore" style="display: none;margin-top:25px;margin-bottom:0px;width:100%;">
+                          <div class="h-divider center_div" style="width:100%;"></div>
+                          <div class="input-group input-group-md" style="width:80%;">
+                              <span class="input-group-addon" style="background-color:#f9f6f6;">MAC Service url</span>
+                              <input type="text" class="form-control" value="http://devgenomicservices1.nmdp.org/mac" name="macUrl" aria-describedby="sizing-addon3">
+                          </div>
+                          <div class="checkbox"  style="width:100%;">
+                              <label  style="padding-right:10px;">
+                                  <input type="checkbox" name="expandAC" checked>Expand Allele Codes</input>
+                              </label>
+                             <label style="padding-right:10px;">
+                                  <input type="checkbox" name="expandGen">Expand Genomic typing</input>
+                              </label>
+                              <label style="padding-right:10px;">
+                                  <input type="checkbox" name="expandGeno">Expand Genotypes</input>
+                              </label>
 
+                          </div>
+                          <div class="checkbox"  style="width:100%;">
+                             <label style="padding-right:10px;">
+                                  <input type="checkbox" name="removeArs">Remove ARS Character</input>
+                              </label>
+                          </div>
+                      </div>
 
-      <div class="col-sm-6" style="margin-left:-8px;width:55%;">
-        <div class="input-group input-group-sm" >
-            <span class="input-group-addon" style="background-color:#f9f6f6;">Database Version</span>
-              <select class="form-control" class="selectpicker"  data-max-options="1" name="dbversion">
-                  <option>3.21.0</option>
-                  <option>3.20.0</option>
-                  <option>3.19.0</option>
-                  <option>3.18.0</option>
-                  <option>3.17.0</option>
-                  <option>3.16.0</option>
-                  <option>3.15.0</option>
-                  <option>3.14.0</option>   
-                  <option>3.13.0</option>
-                  <option>3.12.0</option>
-                  <option>3.11.0</option>
-                  <option>3.10.0</option>
-                  <option>3.09.0</option>
-                  <option>3.08.0</option>
-                  <option>3.07.0</option>
-                  <option>3.06.0</option>
-                  <option>3.05.0</option>
-                  <option>3.04.0</option>
-                  <option>3.03.0</option>
-                  <option>3.02.0</option> 
-                  <option>3.01.0</option>
-                  <option>3.0.0</option>                     
-              </select>
-          </div><!-- /input-group -->
-        </div><!-- /.col--6 -->
-
-
-    </div><!-- /.row -->
-  
-    <div class="input-group input-group-sm col-sm-10" style="margin-bottom:10px;width:99%;">
-      <span class="input-group-addon" style="background-color:#f9f6f6;" id="sizing-addon3">Glstring</span>
-      <input type="text" class="form-control" placeholder="A*01:01/A*01:02+A*01:03/A*02:01" name="glstring" aria-describedby="sizing-addon3" >
-    </div>
-
-      <div id="Demo-BS">
-        <input type="submit" id="form_button" class="btn btn-primary btn-sm" onclick="getAction()"></input>
-        <div  style="margin-left:83px;margin-top:-27px;">
-          <input id="myFile" type="file" name="filename"></input>
-        </div>
+                  </div>
+              </form>
+              <% IF download.defined %>
+                  <form id="submit_modal" action="<% request.uri_base %>/download" >
+                    <div id="Demo-BS" style="text-align:right;margin-top:-27px;">
+                      <input type="submit" class="btn btn-primary btn-large" onClick="downloadClient()" value="Download Results"></input>
+                      <span name="type"></span>
+                    </div>
+                  </form>
+                <% END %>
+          </header>
       </div>
-  </div>
-  </form>
-    <% IF download.defined %>
-      <form id="submit_modal" action="<% request.uri_base %>/download" >
-        <div id="Demo-BS" style="text-align:right;margin-top:-27px;">
-          <input type="submit" class="btn btn-primary btn-large" onClick="downloadClient()" value="Download Results"></input>
-          <span name="type"></span>
-        </div>
-      </form>
-    <% END %>
-</header>
-
-<div class="center_div" style="margin-top:-10px;margin-bottom:15px;">
-  <button  type="button" onclick="highlightArsGroups()" class="btn btn-default btn-group-xs">Highlight ARS Groups</button>
-</div>
 
 
 <% IF error.defined %>
@@ -103,7 +137,8 @@
   </ul>
 <% ELSIF reduced_glstring.defined %>
 
-  <div class="center_div">
+
+  <div class="center_div" style="width:98%;">
     <div class="table-responsive" >
 
       <table class="table table-hover">
@@ -125,7 +160,9 @@
         </tbody>
         </table>
     </div>
+
   </div>
+
 <% END %>
 
 

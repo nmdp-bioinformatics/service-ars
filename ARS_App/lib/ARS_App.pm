@@ -63,10 +63,6 @@ our $VERSION = '0.1';
 my $ars  = new ARS();
 my %h_cached_glstrings;
 
-# my $compare        = new Compare($ars);
-# my $ra_dbs         = $compare->getDbs();
-# my $rh_counts      = $compare->compareCounts($db1,$db2);
-# my $rh_alleleCodes = $compare->compareAlleleCodes($db1,$db2);
 
 my %h_valid_loci = (
 	"A" => 1,"B" => 1,"C" => 1,
@@ -182,7 +178,7 @@ post '/reduxfile' => sub {
 	my @a_data;
 	if(-e $dir){
 		my $cnt = 0;
-		#open(my $fh_out,">",$out_file) or die "CANT OPEN FILE $! $0";
+		open(my $fh_out,">",$out_file) or die "CANT OPEN FILE $! $0";
 	    open($fh,"<",$dir) or die "CANT OPEN FILE $! $0";
 	    while(<$fh>){
 	    	chomp;
@@ -192,7 +188,7 @@ post '/reduxfile' => sub {
 
 	    	if(defined $invalidGlFormat || defined $invalidAlleles){
 	    		if(defined $invalidGlFormat){
-		    		#print $fh_out join(",",$cnt,$_,$invalidGlFormat),"\n";
+		    		print $fh_out join(",",$cnt,$_,$invalidGlFormat),"\n";
 	    			push @a_data, {
 			          reduced  => $invalidGlFormat,			     	
 			          glstring => $_,
@@ -200,7 +196,7 @@ post '/reduxfile' => sub {
 			    	};
 			    }
 			    if(defined $invalidAlleles){
-		    		#print $fh_out join(",",$cnt,$_,$invalidAlleles),"\n";
+		    		print $fh_out join(",",$cnt,$_,$invalidAlleles),"\n";
 	    			push @a_data, {
 			          reduced  => "Invalid Alleles! ".$invalidAlleles,			     	
 			          glstring => $_,
@@ -220,7 +216,7 @@ post '/reduxfile' => sub {
 			          glstring => $_,
 			          count    => $cnt
 			     };
-	    		#print $fh_out join(",",$cnt,$_,$s_ars_glstring),"\n";
+	    		print $fh_out join(",",$cnt,$_,$s_ars_glstring),"\n";
 	    	}
 	    	$cnt++;
 	    }
@@ -249,15 +245,24 @@ get '/redux' => sub {
 	my $arsType   = params->{'arsType'};
 	my $dbversion = params->{'dbversion'};
 	my $glstring  = params->{'glstring'};
+	my $expandAC  = params->{'expandAC'};
+	my $expandGe  = params->{'expandGen'};
+	my $expandGn  = params->{'expandGeno'};
+	my $removeArs = params->{'removeArs'};
+	my $macUrl    = params->{'url'};
+	my $arsFile   = params->{'arsFile'};
 
 	$dbversion =~ s/\.//g;
 
 	my $invalidGlFormat = validGlstring($glstring,$dbversion);
-    my $invalidAlleles  = invalidAlleles($glstring,$dbversion);
+    my $invalidAlleles  = invalidAlleles($glstring,$dbversion,$arsFile);
 
 	my @a_data;
 	if(!defined $invalidGlFormat && !defined $invalidAlleles){
-		my $s_glstring = $ars->redux_mark($glstring,$dbversion,$arsType);
+
+		my $s_glstring = $ars->redux($glstring,$dbversion,$arsType,$arsFile,$expandAC,$expandGe,$expandGn,$removeArs,$macUrl);
+		$s_glstring = defined $expandGe ? $ars->expandGenomic($s_glstring,$dbversion,$macUrl,$arsFile) : $s_glstring;
+		$s_glstring = $ars->expandGenos($s_glstring)   if defined $expandGn && $expandGn =~ /\S/;
 
 		$s_glstring = join("\n",unpack("(A164)*",$s_glstring))
 			if(length($s_glstring)  > 164);
@@ -295,47 +300,115 @@ get '/redux' => sub {
 };
 
 
-=head2 compare
 
-	
+=head2 reduxSubjects API Call
+
+	curl --header "Content-type: application/json" --request POST 
+	--data '{"arsFile":"hla_nom_g.txt","dbversion":"3.20.0","arsType":"G",
+	"Subjects":[{"SubjectID":1,"typing":["A*01:01+A*01:02","B*08:01+B*07:02","C*07:01+C*07:01"]},
+	{"SubjectID":1,"typing":["A*01:01+A*01:02","B*08:01+B*07:02","C*07:01+C*07:01"]}]}' 
+	http://localhost:3000/api/v1/reduxSubjects
+
+	curl --header "Content-type: application/json" --request POST
+	 --data '{"arsFile":"hla_nom_g.txt","macUrl":"http://devgenomicservices1.nmdp.org/mac","dbversion":"3.20.0","arsType":"g",
+	"Subjects":[{"SubjectID":1,"typing":["A*01:AB+A*01:02","B*08:01+B*07:02","C*07:01+C*07:01"]},
+	{"SubjectID":1,"typing":["A*01:01+A*01:02","B*08:01+B*07:02","C*07:01+C*07:01"]}]}' 
+	http://localhost:3000/api/v1/reduxSubjects
+
 =cut
-get '/compare' => sub {
+post '/api/v1/reduxSubjects' => sub {
 
-	# my $db1  = params->{'dbversion1'};
-	# my $db2  = params->{'dbversion2'};
 
-	# $db1 =~ s/\.//g;
-	# $db2 =~ s/\.//g;
+	my $ra_subjects = params->{'Subjects'};
+	my $arsType     = params->{'arsType'};
+	my $dbversion   = params->{'dbversion'};
+	my $expandAC    = params->{'expandAC'};
+	my $expandGe    = params->{'expandGen'};
+	my $expandGn    = params->{'expandGeno'};
+	my $removeArs   = params->{'removeArs'};
+	my $macUrl      = params->{'macUrl'};
+	my $arsFile     = params->{'arsFile'};
 
-	# my ($rh_cmp1,$rh_cmp2) = $cmp->compare($db1,$db2);
+    $dbversion  =~ s/\.//g;
 
- #   template 'compare', {
- #        'db1'   => $db1,
- #        'db2'   => $db2,
- #        'cmp1'  => $rh_cmp,
- #        'cmp2'  => $rh_cmp2
- #   };
+    my @a_redux_subjects;
+	foreach my $rh_subject (@$ra_subjects){
+
+		my @a_redux_gls;
+		my $ra_glstrings = $$rh_subject{typing};
+		foreach my $glstring (@$ra_glstrings){
+
+			$glstring =~ s/HLA-//g;
+			my $invalidGlFormat = validGlstring($glstring,$dbversion);
+		    my $invalidAlleles  = invalidAlleles($glstring,$dbversion,$arsFile);
+
+		    if(defined $invalidGlFormat || defined $invalidAlleles){
+		    	if(defined $invalidGlFormat){
+			    	push(@a_redux_gls,{
+						error => $invalidGlFormat
+			    	});
+				}
+				if(defined $invalidAlleles){
+			    	push(@a_redux_gls,{
+						error => "Invalid Alleles! ".$invalidAlleles
+				   });			
+				}
+		    }else{
+
+		    	my $s_glstring = $ars->redux($glstring,$dbversion,$arsType,$arsFile,$expandAC,$expandGe,$expandGn,$removeArs,$macUrl);
+				$s_glstring = defined $expandGe ? $ars->expandGenomic($s_glstring,$dbversion,$macUrl,$arsFile) : $s_glstring;
+				$s_glstring = $ars->expandGenos($s_glstring)   if defined $expandGn && $expandGn =~ /\S/;
+
+			    if($s_glstring =~ /Invalid/){
+			    	push(@a_redux_gls,{
+						error => $s_glstring
+			    	});
+				}else{
+				   push(@a_redux_gls,$s_glstring);
+				}
+			}
+		}
+
+		push(@a_redux_subjects,{
+			SubjectID => $$rh_subject{SubjectID},
+			typing =>  \@a_redux_gls
+		});	
+	}
+
+	return {
+        arsType    => $arsType,
+        dbversion  => $dbversion,
+        macUrl     => $macUrl,
+        Subjects   => \@a_redux_subjects
+    };
 
 
 };
 
+
 =head2 redux API Call
-	
+
+	curl --header "Content-type: application/json" --request POST \ 
+	--data '{"arsFile":"hla_nom_g.txt","glstring":"A*01:01","dbversion":"3.20.0","arsType":"G"}'  \
+	http://localhost:3000/api/v1/redux
 	
 =cut
-get '/api/v1/redux' => sub {
+any ['get', 'post'] => '/api/v1/redux' => sub {
 
-    my $dbversion = param('dbversion');
-    my $ars_type  = param('arsType');
-    my $glstring  = param('glstring');
+	my $arsType   = params->{'arsType'};
+	my $dbversion = params->{'dbversion'};
+	my $glstring  = params->{'glstring'};
+	my $expandAC  = params->{'expandAC'};
+	my $expandGe  = params->{'expandGen'};
+	my $expandGn  = params->{'expandGeno'};
+	my $removeArs = params->{'removeArs'};
+	my $macUrl    = params->{'url'};
+	my $arsFile   = params->{'arsFile'};
 
-    $glstring   =~ s/ /\+/g;
     $dbversion  =~ s/\.//g;
-    $glstring   =~ /^(\D+\d{0,1})\*/;
     
-    my $s_locus = $1;
 	my $invalidGlFormat = validGlstring($glstring,$dbversion);
-    my $invalidAlleles  = invalidAlleles($glstring,$dbversion);
+    my $invalidAlleles  = invalidAlleles($glstring,$dbversion,$arsFile);
 
     if(defined $invalidGlFormat || defined $invalidAlleles){
     	if(defined $invalidGlFormat){
@@ -349,23 +422,79 @@ get '/api/v1/redux' => sub {
 		    };			
 		}
     }else{
-    	my $s_ars_glstring = $ars->redux($glstring,$dbversion,$ars_type);
 
-	    if($s_ars_glstring =~ /Invalid/){
+    	my $s_glstring = $ars->redux($glstring,$dbversion,$arsType,$arsFile,$expandAC,$expandGe,$expandGn,$removeArs,$macUrl);
+		$s_glstring = defined $expandGe ? $ars->expandGenomic($s_glstring,$dbversion,$macUrl,$arsFile) : $s_glstring;
+		$s_glstring = $ars->expandGenos($s_glstring)   if defined $expandGn && $expandGn =~ /\S/;
+
+	    if($s_glstring =~ /Invalid/){
 		    return {
-		        error => $s_ars_glstring
+		        error => $s_glstring
 		    };
 		}else{
 		    return {
 		        dbversion => $dbversion,
-		        arsType   => $ars_type,
-		        locus     => $s_locus,
-		        glstring  => $s_ars_glstring
+		        arsType   => $arsType,
+		        glstring  => $s_glstring
 		    };
 		}
 	}
 
 };
+
+=head2 redux API Call
+
+	http://localhost:3000/api/v1/ars
+	** Returns all ARS data
+
+	curl http://localhost:3000/api/v1/ars?arsType=G
+	** Returns all G ARS data
+
+
+	
+=cut
+get '/api/v1/ars' => sub {
+
+	my $arsType   = params->{'arsType'};
+	my $dbversion = params->{'dbversion'};
+	my $arsFile   = params->{'arsFile'};
+
+    $dbversion  =~ s/\.//g if defined $dbversion;
+
+    $arsType   = !defined $arsType   ? undef : $arsType;
+    $dbversion = !defined $dbversion ? undef : $dbversion;
+    $arsFile   = !defined $arsFile   ? undef : $arsFile;
+
+	my %h_invalid;
+	if(defined $arsType && !$ars->validArsType($arsType)){
+		$h_invalid{"Invalid Ars Type"} = $arsType;
+	}
+	if(defined $dbversion && !$ars->validDbVersion($dbversion)){
+		$h_invalid{"Invalid IMGT DB"} = $arsType;
+	}
+	if(defined $arsFile && !$ars->validArsFile($arsFile)){
+		$h_invalid{"Invalid Ars File"} = $arsFile;
+	}
+
+    if((scalar keys %h_invalid) >= 1){
+	    return {
+	    	error => \%h_invalid
+	    };
+    }else{
+    	my $rh_ars_hash = $ars->getArsData($arsFile,$dbversion,$arsType);
+    	if((scalar keys %$rh_ars_hash) <= 1){ 
+    		return {
+	    		error => join(" ",$arsType,$dbversion,$arsFile)
+	    	};
+		}else{
+			return {
+	    		%$rh_ars_hash
+	    	};
+		}
+	}
+
+};
+
 
 
 =head2 Validation API Call
@@ -474,13 +603,13 @@ sub validGlstring{
 =cut
 sub invalidAlleles{
 
-	my($glstring,$dbv) = @_;
+	my($glstring,$dbv,$s_nom_file) = @_;
 
 	my %h_invalid;
 	my $isInvalid = 0;
 	map{ my $gl1 = $_; map{ my $gl2 = $_; map{ my $gl3 = $_;map{ my $gl4 = $_; 
 		map{
-			if(!$ars->isAC($_) && !$ars->isArsGroup($_,$dbv)){
+			if(!$ars->isAC($_) && !$ars->isArsGroup($_,$dbv,$s_nom_file)){
 				my $b_valid = $ars->validateAllele($_,$dbv);
 				if(!$b_valid){
 					$isInvalid = 1;
