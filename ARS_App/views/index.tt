@@ -89,7 +89,7 @@
                           <div class="h-divider center_div" style="width:100%;"></div>
                           <div class="input-group input-group-md" style="width:80%;">
                               <span class="input-group-addon" style="background-color:#f9f6f6;">MAC Service url</span>
-                              <input type="text" class="form-control" value="http://devgenomicservices1.nmdp.org/mac" name="macUrl" aria-describedby="sizing-addon3">
+                              <input type="text" class="form-control" value="mac.b12x.org" name="macUrl" aria-describedby="sizing-addon3">
                           </div>
                           <div class="checkbox"  style="width:100%;">
                               <label  style="padding-right:10px;">

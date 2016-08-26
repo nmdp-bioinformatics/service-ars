@@ -11,9 +11,8 @@
 -->
 
 <!-- Jumbotron Header -->
-<legend style="text-align:left;margin-top:85px;">Contact</legend>
 
-<address>
+<address style="margin-top:85px;">
   <strong>Mike Halagan</strong><br>
   Bioinformatics Scientist<br>
   3001 Broadway Stree NE<br>

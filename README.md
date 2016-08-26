@@ -1,2 +1,2 @@
 # service-ars
-ARS reduction service
+RESTful Service for Antigen Recognition Site Reduction
