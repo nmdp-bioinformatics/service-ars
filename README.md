@@ -1,9 +1,13 @@
 # service-ars
 RESTful Service for Antigen Recognition Site Reduction
 
-## Using service-ars
+## Documentation
 
-### RESTful Calls
+ * [readthedocs.org](http://search.maven.org/#search|ga|1|g%3A%22org.nmdp.ngs%22)
+ * [docker-ars](http://search.maven.org/#search|ga|1|g%3A%22org.nmdp.ngs%22)
+ * [dockerhub](http://search.maven.org/#search|ga|1|g%3A%22org.nmdp.ngs%22)
+
+## Using service-ars
 
 ARS Reduction on typing data
 ```bash
@@ -34,7 +38,7 @@ Get ARS data structure for a particular IMGT/DB version
 
 ### Tools
 
-ex. test1.json
+ex. config.json
 ```bash
 {  
    "arsFile":"hla_nom_g.txt",
@@ -61,12 +65,12 @@ arguments:
 
 ```
 
-ex. hml-typing-resolution
+hml-typing-resolution
 ```bash
-hml-typing-resolution -j test1.json -x < inputFile.xml > outputFile.xml
-hml-typing-resolution -j test1.json -x -i inputFile.xml > outputFile.xml
-hml-typing-resolution -j test1.json -c -i inputFile.xml > outputFile.csv
-hml-typing-resolution -j test1.json -s -i inputFile.xml > outputFile.json
+hml-typing-resolution -j config.json -x < inputFile.xml > outputFile.xml
+hml-typing-resolution -j config.json -x -i inputFile.xml > outputFile.xml
+hml-typing-resolution -j config.json -c -i inputFile.xml > outputFile.csv
+hml-typing-resolution -j config.json -s -i inputFile.xml > outputFile.json
 ```
 
 #### Perl
@@ -77,13 +81,17 @@ hml-typing-resolution -j test1.json -s -i inputFile.xml > outputFile.json
 -h/--help
 ```
 
-ex. ars-resolution
+ars-resolution
 ```bash
-ars-resolution -c test1.json < testInput.csv > testOutput.csv
+ars-resolution -c config.json < testInput.csv > testOutput.csv
 ```
 
 
 ## Installing
+
+```bash
+./build.sh
+```
 
 ### Required Software
 
@@ -102,12 +110,6 @@ ars-resolution -c test1.json < testInput.csv > testOutput.csv
  * Getopt::Long 
  * LWP::UserAgent 
  * Test::More Dancer
-
-## Documentation
-
- * [readthedocs.org](http://search.maven.org/#search|ga|1|g%3A%22org.nmdp.ngs%22)
- * [docker-ars](http://search.maven.org/#search|ga|1|g%3A%22org.nmdp.ngs%22)
- * [dockerhub](http://search.maven.org/#search|ga|1|g%3A%22org.nmdp.ngs%22)
 
 ## Docker Image
 [![](https://images.microbadger.com/badges/image/nmdpbioinformatics/docker-ars.svg)](http://microbadger.com/images/nmdpbioinformatics/docker-ars "Get your own image badge on microbadger.com")[![](https://images.microbadger.com/badges/version/nmdpbioinformatics/docker-ars.svg)](http://microbadger.com/images/nmdpbioinformatics/docker-ars "Get your own version badge on microbadger.com")

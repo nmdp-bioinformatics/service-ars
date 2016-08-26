@@ -2,9 +2,12 @@ sudo: required
 dist: trusty
 
 before_install:
-  - sudo PERL_MM_USE_DEFAULT=1 apt-get update -qyy
-  - sudo apt-get dist-upgrade -qy
   - sudo apt-get install -qyy openjdk-7-jre-headless perl-doc wget curl build-essential git
   - sudo cpan YAML Plack Plack::Handler::Starman Template JSON Getopt::Long Data::Dumper LWP::UserAgent Test::More Dancer
 
+env:
+  global:
+    - PERL_MM_USE_DEFAULT=1
+
 script: "./build.sh"
+
