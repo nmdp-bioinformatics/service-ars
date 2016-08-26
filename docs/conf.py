@@ -40,7 +40,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'HML Blast Validation'
+project = u'service-ars'
 copyright = u'2014, National Marrow Donor Program'
 
 # The version info for the project you're documenting, acts as replacement for

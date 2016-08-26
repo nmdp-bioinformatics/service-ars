@@ -1,4 +1,4 @@
-RESTful Calls
+RESTful Interface
 ================================
 
 Parameters

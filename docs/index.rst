@@ -1,4 +1,4 @@
-ARS Service
+service-ars
 ================
 
 Getting started
