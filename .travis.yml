@@ -2,6 +2,7 @@ sudo: required
 dist: trusty
 
 before_install:
+  - PERL_MM_USE_DEFAULT=1 apt-get update -q
   - sudo apt-get dist-upgrade -qy
   - apt-get dist-upgrade -qy
   - apt-get install -qyy openjdk-7-jre-headless perl-doc wget curl build-essential git
