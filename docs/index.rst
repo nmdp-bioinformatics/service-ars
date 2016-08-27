@@ -24,4 +24,4 @@ Developers
 
    contributing
    installation
-   requirements
+   docker

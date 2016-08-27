@@ -60,6 +60,7 @@ use Data::Dumper;
 use REST::Client;
 use JSON;
 
+our $VERSION = '0.1';
 
 =head2 redux
 

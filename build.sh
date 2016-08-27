@@ -3,9 +3,9 @@
 
 # Install ARS_App and launch
 cd ARS_App
-perl Makefile.PL
-make test
-make install
+sudo perl Makefile.PL
+sudo make test
+sudo make install
 
 plackup -E deployment -s Starman -p 3000 -a bin/app.pl &
 
@@ -15,7 +15,7 @@ mvn install
 
 # Install perl clients
 cd ../client-perl
-perl Makefile.pl
-make test
-make install
+sudo perl Makefile.pl
+sudo make test
+sudo make install
 
