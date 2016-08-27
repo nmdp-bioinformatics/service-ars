@@ -1,6 +1,7 @@
 # service-ars
 RESTful Service for Antigen Recognition Site Reduction
 
+## Build
 
 ## Docker Image
 [![](https://images.microbadger.com/badges/image/nmdpbioinformatics/docker-ars.svg)](http://microbadger.com/images/nmdpbioinformatics/docker-ars "Get your own image badge on microbadger.com")[![](https://images.microbadger.com/badges/version/nmdpbioinformatics/docker-ars.svg)](http://microbadger.com/images/nmdpbioinformatics/docker-ars "Get your own version badge on microbadger.com")
@@ -10,25 +11,21 @@ RESTful Service for Antigen Recognition Site Reduction
 ## Using service-ars
 
 ```bash
-     curl http://localhost:3000/api/v1/redux?typing=A*01:01?dbversion=3.20
-```
+    
+    # Do ARS reduction on a typing #
+    curl http://localhost:3000/api/v1/redux?typing=A*01:01?dbversion=3.20
 
-
-```bash
+   # Do ARS reduction on multiple subjects # 
     curl --header "Content-type: application/json" --request POST 
     --data '{"arsFile":"hla_nom_g.txt","dbversion":"3.20.0","arsType":"G",
     "Subjects":[{"SubjectID":1,"typing":["A*01:01+A*01:02","B*08:01+B*07:02","C*07:01+C*07:01"]},
     {"SubjectID":1,"typing":["A*01:01+A*01:02","B*08:01+B*07:02","C*07:01+C*07:01"]}]}' 
     http://localhost:3000/api/v1/reduxSubjects
-```
-
-
-```bash
+    
+    # Get all the ARS data #
     curl http://localhost:3000/api/v1/ars
-```
-
-
-```bash
+    
+    # Get all the ARS data for IMGTDB 3.20.0 #
     curl http://localhost:3000/api/v1/ars?dbversion=3.20.0
 ```
 
@@ -61,7 +58,7 @@ arguments:
 
 ```
 
-ex.
+
 ```bash
 hml-typing-resolution -j config.json -x < inputFile.xml > outputFile.xml
 hml-typing-resolution -j config.json -x -i inputFile.xml > outputFile.xml
@@ -72,12 +69,12 @@ hml-typing-resolution -j config.json -s -i inputFile.xml > outputFile.json
 #### Perl
 ```bash
 ./ars-resolution [--config] [--verbos] [--help]
--c/--config
--v/--verbose
--h/--help
+    -c/--config
+    -v/--verbose
+    -h/--help
 ```
 
-ex.
+
 ```bash
 ars-resolution -c config.json < testInput.csv > testOutput.csv
 ```

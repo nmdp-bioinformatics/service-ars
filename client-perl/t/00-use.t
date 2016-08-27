@@ -47,32 +47,12 @@ use strict;
 use warnings;
 use Test::More;
 use Data::Dumper;
-BEGIN{
-
-    my $working    = `pwd`;chomp($working);
-    if($working !~ /\/t/){
-        my $lib = $working."/lib";
-        push(@INC,$lib);
-    }else{
-        $working =~ s/\/t//;
-        my $lib = $working."/lib";
-        push(@INC,$lib);
-    }    
-    push(@INC,"../lib/");
-
-}
+use FindBin;
+use lib "$FindBin::Bin/../lib";
 use ARS_Client;
 my $number_of_tests_run = 0; # Number of tests run
 
-my $s_gl = "A*01:01";
-my $s_ars_gl = ARS_Client::redux_cached("g","3.20.0",$s_gl);
-if($s_ars_gl eq "A*01:01g"){
-    is(1,1);$number_of_tests_run++;
-}else{
-    is(0,1,"A*01:01 not properly reduced!");$number_of_tests_run++;
-}
-
-
+is(1,1);$number_of_tests_run++;
 
 done_testing( $number_of_tests_run );
 

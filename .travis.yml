@@ -9,5 +9,5 @@ env:
   global:
     - PERL_MM_USE_DEFAULT=1
 
-script: "./build.sh"
+script: "sudo sh build.sh"
 
