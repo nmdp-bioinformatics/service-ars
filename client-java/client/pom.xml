@@ -23,6 +23,7 @@
      <dependency>
       <groupId>com.github.davidmoten</groupId>
       <artifactId>rtree</artifactId>
+      <version>0.7.4</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
