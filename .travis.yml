@@ -3,7 +3,7 @@ dist: trusty
 
 before_install:
   - sudo apt-get install -qyy openjdk-7-jre-headless perl-doc wget curl build-essential git
-  - sudo cpan YAML Plack Plack::Handler::Starman Template JSON Getopt::Long Data::Dumper LWP::UserAgent Test::More Dancer
+  - sudo cpan YAML Plack Plack::Handler::Starman Template JSON Getopt::Long Data::Dumper LWP::UserAgent REST::Client Test::More Dancer
 
 env:
   global:

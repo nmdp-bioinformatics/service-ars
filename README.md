@@ -1,14 +1,13 @@
 # service-ars
 RESTful Service for Antigen Recognition Site Reduction
 
-Further documentation is available at [service-ars.readthedocs.org](http://search.maven.org/#search|ga|1|g%3A%22org.nmdp.ngs%22)
-
 ### Build
+[![Build Status](https://travis-ci.org/nmdp-bioinformatics/service-ars.svg?branch=master)](https://travis-ci.org/nmdp-bioinformatics/service-ars)
 
 ### Docker Image
 [![](https://images.microbadger.com/badges/image/nmdpbioinformatics/docker-ars.svg)](http://microbadger.com/images/nmdpbioinformatics/docker-ars "Get your own image badge on microbadger.com")[![](https://images.microbadger.com/badges/version/nmdpbioinformatics/docker-ars.svg)](http://microbadger.com/images/nmdpbioinformatics/docker-ars "Get your own version badge on microbadger.com")
 
-
+Further documentation is available at [service-ars.readthedocs.io](http://service-ars.readthedocs.io/en/stable/index.html)
 
 ## Using service-ars
 
@@ -109,8 +108,7 @@ ars-resolution -c config.json < testInput.csv > testOutput.csv
 
 ### Related Pages
 
- * [readthedocs.org](http://search.maven.org/#search|ga|1|g%3A%22org.nmdp.ngs%22)
- * [docker-ars](http://search.maven.org/#search|ga|1|g%3A%22org.nmdp.ngs%22)
- * [dockerhub](http://search.maven.org/#search|ga|1|g%3A%22org.nmdp.ngs%22)
+ * [docker-ars](https://github.com/nmdp-bioinformatics/docker-ars)
+ * [dockerhub](https://hub.docker.com/r/nmdpbioinformatics/docker-ars/)
 
 
