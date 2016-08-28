@@ -56,6 +56,7 @@ use Dancer ':syntax';
 use Data::Dumper;
 use ARS;
 
+use POSIX qw(strftime);
 our $VERSION = '0.1';
 
 
@@ -84,6 +85,7 @@ my %h_client_zips = (
 	
 =cut
 get '/' => sub {
+	deleteOldFiles();
     template 'index';
 };
 
@@ -161,64 +163,76 @@ get '/download' => sub {
 =cut
 post '/reduxfile' => sub {
 
+
  	my $file     = request->upload('filename');
  	my $filename = $file->filename;
 
-    # then you can do several things with that file
-    my $working  = `pwd`;chomp($working);
-    my $dir      = $working."/".$filename;
-    my $out_file = $working."/public/downloads/ars_redux.txt";
+	# then you can do several things with that file
+	my $working  = `pwd`;chomp($working);
+	my $dir      = $working."/public/downloads/".$filename;
 
-    $file->copy_to("$dir");
-    my $fh        = $file->file_handle;
-    my $arsType   = params->{'arsType'};
+	$file->copy_to("$dir");
+	my $fh        = $file->file_handle;
+	my $arsType   = params->{'arsType'};
 	my $dbversion = params->{'dbversion'};
+	my $glstring  = params->{'glstring'};
+	my $expandAC  = params->{'expandAC'};
+	my $expandGe  = params->{'expandGen'};
+	my $expandGn  = params->{'expandGeno'};
+	my $removeArs = params->{'removeArs'};
+	my $macUrl    = params->{'url'};
+	my $arsFile   = params->{'arsFile'};
 	$dbversion    =~ s/\.//g;
+
+	my $date = strftime "%m-%d-%Y", localtime;
+	my $outname  = "Ars_".$arsType.".".$date.".csv";
+	my $out_file = $working."/public/downloads/".$outname;
 
 	my @a_data;
 	if(-e $dir){
-		my $cnt = 0;
-		open(my $fh_out,">",$out_file) or die "CANT OPEN FILE $! $0";
-	    open($fh,"<",$dir) or die "CANT OPEN FILE $! $0";
-	    while(<$fh>){
+	    open(my $fh_out,">",$out_file) or die "CANT OPEN FILE $! $0";
+	    foreach(`ngs-extract-expected-haploids -i $dir`){
 	    	chomp;
+	    	#1000-0000-0     HLA-A   HLA     IMGT/HLA        3.17.0  HLA-A*01:01:01:01+HLA-A*02:01:01:01
+	    	my($id,$s_locus,$gene,$imgt,$imgt_db,$glstring) = split(/\t/,$_);
+	    	$glstring =~ s/HLA-//g;
 
-	    	my $invalidGlFormat = validGlstring($_,$dbversion);
-    		my $invalidAlleles  = invalidAlleles($_,$dbversion);
+	    	my $invalidGlFormat = validGlstring($glstring,$dbversion);
+			my $invalidAlleles  = invalidAlleles($glstring,$dbversion,$arsFile);
 
 	    	if(defined $invalidGlFormat || defined $invalidAlleles){
 	    		if(defined $invalidGlFormat){
-		    		print $fh_out join(",",$cnt,$_,$invalidGlFormat),"\n";
+		    		print $fh_out join(",",$id,$glstring,$invalidGlFormat),"\n";
 	    			push @a_data, {
 			          reduced  => $invalidGlFormat,			     	
-			          glstring => $_,
-			          count    => $cnt
+			          glstring => $glstring,
+			          count    => $id
 			    	};
 			    }
 			    if(defined $invalidAlleles){
-		    		print $fh_out join(",",$cnt,$_,$invalidAlleles),"\n";
+		    		print $fh_out join(",",$id,$glstring,$invalidAlleles),"\n";
 	    			push @a_data, {
 			          reduced  => "Invalid Alleles! ".$invalidAlleles,			     	
-			          glstring => $_,
-			          count    => $cnt
+			          glstring => $glstring,
+			          count    => $id
 			    	};			    	
 			    }
 	    	}else{
 	    		
-	    		my $s_ars_marked   = $ars->redux_mark($_,$dbversion,$arsType);
-	    		my $s_ars_glstring = $ars->redux($_,$dbversion,$arsType);
+		    	my $s_glstring = $ars->redux($glstring,$dbversion,$arsType,$arsFile,$expandAC,$expandGe,$expandGn,$removeArs,$macUrl);
+				$s_glstring = defined $expandGe ? $ars->expandGenomic($s_glstring,$dbversion,$macUrl,$arsFile) : $s_glstring;
+				$s_glstring = $ars->expandGenos($s_glstring)   if defined $expandGn && $expandGn =~ /\S/;
 
-	    		$s_ars_marked = join("\n",unpack("(A164)*",$s_ars_marked))
-					if(length($s_ars_marked)  > 164);
+	    		$s_glstring = join("\n",unpack("(A164)*",$s_glstring))
+					if(length($s_glstring)  > 164);
 
 			    push @a_data, {
-			          reduced  => $s_ars_marked,		
-			          glstring => $_,
-			          count    => $cnt
+			          reduced  => $s_glstring,		
+			          glstring => $glstring,
+			          count    => $id
 			     };
-	    		print $fh_out join(",",$cnt,$_,$s_ars_glstring),"\n";
+	    		print $fh_out join(",",$id,$glstring,$s_glstring),"\n";
 	    	}
-	    	$cnt++;
 	    }
 	    close $fh;
 	}else{
@@ -230,10 +244,93 @@ post '/reduxfile' => sub {
 
 	template 'index', {
         'reduced_glstring'  => \@a_data,
-        'download'          => "ars_file"
+        'download'          => $outname
    	};
 
 };
+
+
+
+=head2 reduxfile
+
+	
+
+=cut
+# post '/reduxfile' => sub {
+
+#  	my $file     = request->upload('filename');
+#  	my $filename = $file->filename;
+
+#     # then you can do several things with that file
+#     my $working  = `pwd`;chomp($working);
+#     my $dir      = $working."/".$filename;
+#     my $out_file = $working."/public/downloads/ars_redux.txt";
+
+#     $file->copy_to("$dir");
+#     my $fh        = $file->file_handle;
+#     my $arsType   = params->{'arsType'};
+# 	my $dbversion = params->{'dbversion'};
+# 	$dbversion    =~ s/\.//g;
+
+# 	my @a_data;
+# 	if(-e $dir){
+# 		my $cnt = 0;
+# 		open(my $fh_out,">",$out_file) or die "CANT OPEN FILE $! $0";
+# 	    open($fh,"<",$dir) or die "CANT OPEN FILE $! $0";
+# 	    while(<$fh>){
+# 	    	chomp;
+
+# 	    	my $invalidGlFormat = validGlstring($_,$dbversion);
+#     		my $invalidAlleles  = invalidAlleles($_,$dbversion);
+
+# 	    	if(defined $invalidGlFormat || defined $invalidAlleles){
+# 	    		if(defined $invalidGlFormat){
+# 		    		print $fh_out join(",",$cnt,$_,$invalidGlFormat),"\n";
+# 	    			push @a_data, {
+# 			          reduced  => $invalidGlFormat,			     	
+# 			          glstring => $_,
+# 			          count    => $cnt
+# 			    	};
+# 			    }
+# 			    if(defined $invalidAlleles){
+# 		    		print $fh_out join(",",$cnt,$_,$invalidAlleles),"\n";
+# 	    			push @a_data, {
+# 			          reduced  => "Invalid Alleles! ".$invalidAlleles,			     	
+# 			          glstring => $_,
+# 			          count    => $cnt
+# 			    	};			    	
+# 			    }
+# 	    	}else{
+	    		
+# 	    		my $s_ars_marked   = $ars->redux_mark($_,$dbversion,$arsType);
+# 	    		my $s_ars_glstring = $ars->redux($_,$dbversion,$arsType);
+
+# 	    		$s_ars_marked = join("\n",unpack("(A164)*",$s_ars_marked))
+# 					if(length($s_ars_marked)  > 164);
+
+# 			    push @a_data, {
+# 			          reduced  => $s_ars_marked,		
+# 			          glstring => $_,
+# 			          count    => $cnt
+# 			     };
+# 	    		print $fh_out join(",",$cnt,$_,$s_ars_glstring),"\n";
+# 	    	}
+# 	    	$cnt++;
+# 	    }
+# 	    close $fh;
+# 	}else{
+# 		template 'index', {
+# 	        'error_glstring'  => $dir,
+# 	        'error'           => "File Does not exist!"	                
+# 	   };
+# 	}
+
+# 	template 'index', {
+#         'reduced_glstring'  => \@a_data,
+#         'download'          => "ars_file"
+#    	};
+
+# };
 
 
 =head2 redux
@@ -310,7 +407,7 @@ get '/redux' => sub {
 	http://localhost:3000/api/v1/reduxSubjects
 
 	curl --header "Content-type: application/json" --request POST
-	 --data '{"arsFile":"hla_nom_g.txt","macUrl":"http://devgenomicservices1.nmdp.org/mac","dbversion":"3.20.0","arsType":"g",
+	 --data '{"arsFile":"hla_nom_g.txt","macUrl":"mac.b12x.org","dbversion":"3.20.0","arsType":"g",
 	"Subjects":[{"SubjectID":1,"typing":["A*01:AB+A*01:02","B*08:01+B*07:02","C*07:01+C*07:01"]},
 	{"SubjectID":1,"typing":["A*01:01+A*01:02","B*08:01+B*07:02","C*07:01+C*07:01"]}]}' 
 	http://localhost:3000/api/v1/reduxSubjects
@@ -627,6 +724,29 @@ sub invalidAlleles{
 
 
 }
+
+=head2 deleteOldFiles
+
+        Title:    deleteOldFiles
+        Usage:    stripInvalid($glstring);
+        Function: 
+  
+=cut
+sub deleteOldFiles{
+
+  my $date      = strftime "%m-%d-%Y", localtime;
+  my $working   = `pwd`;chomp($working);
+  my $dir       =  $working."/public/downloads";
+  foreach my $s_file (glob("$dir/*.csv $dir/*.xml $dir/*.txt")){
+    my @a_file = [$s_file, (stat $s_file)[9]];
+    my $s_file_created = strftime("%m-%d-%Y", localtime $a_file[0]->[1]);
+    if($s_file_created ne $date){
+      system("rm $s_file");
+    }
+  }
+
+}
+
 
 =head2 stripInvalid
 

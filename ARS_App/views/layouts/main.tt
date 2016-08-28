@@ -202,7 +202,7 @@
                 <div  style="margin-bottom: 25px;text-align: center;font-size: 1.0vw;margin-top:5px;">
                     <div style="text-align: left;float: left;margin-top:10px;"><a href="http://bethematch.org/Terms-of-use/">Home &nbsp;&nbsp;&nbsp;&nbsp;</a> <a href="http://bethematch.org/Privacy/">About &nbsp;&nbsp;&nbsp;&nbsp;</a><a href="http://bethematch.org/Privacy/">Github </a></div>
                     <div class="center_div" style="text-align: center;"><span class="glyphicon glyphicon-flash" style="" aria-hidden="true"></span></div>
-                    <div style="text-align: right;margin-bottom:15px;"><a href="http://bethematch.org/Terms-of-use/">Terms &nbsp;&nbsp;&nbsp;&nbsp;</a><a href="http://bethematch.org/Privacy/">Privacy &nbsp;&nbsp;&nbsp;&nbsp;</a><a href="http://bethematch.org/Privacy/">Contact </a></div>
+                    <div style="text-align: right;margin-top:-10px;"><a href="http://bethematch.org/Terms-of-use/">Terms &nbsp;&nbsp;&nbsp;&nbsp;</a><a href="http://bethematch.org/Privacy/">Privacy &nbsp;&nbsp;&nbsp;&nbsp;</a><a href="http://bethematch.org/Privacy/">Contact </a></div>
                 </div>
             </div>
         </footer>

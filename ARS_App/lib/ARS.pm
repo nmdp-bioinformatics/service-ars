@@ -181,7 +181,7 @@ sub new{
     $self->{acurl}   = shift();
 
     $self->{verbose} = !defined $self->{verbose} ? 0 : $self->{verbose};
-	$self->{acurl}   = !defined $self->{acurl}   ? "http://devgenomicservices1.nmdp.org/mac" : $self->{acurl};
+	$self->{acurl}   = !defined $self->{acurl}   ? "mac.b12x.org" : $self->{acurl};
 
 	bless($self, $class); #Create the ars object
    
@@ -693,7 +693,7 @@ $loadARS = sub{
 	my $self = shift();
 
 	my @a_branches;
-    print `git clone https://github.com/jrob119/HLA-WMDA`;
+    print `git clone https://github.com/ANHIG/HLA-WMDA`;
     foreach(`git --git-dir=$s_wmda_dir/.git branch -a`){
         chomp;
         if($_ =~ /\d{4}$/){
@@ -831,6 +831,8 @@ $ac2gl = sub{
 
 	my $s_mac_url = defined $s_url && $s_url =~ /\S/ ? $s_url : $self->{acurl};
 
+	print STDERR $s_mac_url,"\n";
+
 	my($loc,$typ) = split(/\*/,$typing);
 	$typ =~ s/$loc\*//;
 
@@ -839,6 +841,7 @@ $ac2gl = sub{
     my @allele_list_list;my @ret;
 
 	my $url = $s_mac_url."/api/decode?typing=$loc*$typ";
+	print STDERR $url,"\n";
 
     my $response = $ua->request(new HTTP::Request("GET", $url));
     my $code = $response->code;
