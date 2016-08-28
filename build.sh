@@ -15,7 +15,7 @@ mvn install
 
 # Install perl clients
 cd ../client-perl
-sudo perl Makefile.pl
+sudo perl Makefile.PL
 sudo make test
 sudo make install
 

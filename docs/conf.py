@@ -41,7 +41,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'service-ars'
-copyright = u'2014, National Marrow Donor Program'
+copyright = u'2016, National Marrow Donor Program'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -183,7 +183,7 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'Basemaptutorial.tex', u'HML Blast tutorial documentation',
+  ('index', 'Basemaptutorial.tex', u'service-ars documentation',
    u'Michael Halagan', 'manual'),
 ]
 
@@ -227,7 +227,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'Basemaptutorial', u'HML Blast tutorial documentation',
+  ('index', 'Basemaptutorial', u'service-ars documentation',
    u'Michael Halagan', 'Basemaptutorial', 'One line description of project.',
    'Miscellaneous'),
 ]
@@ -245,7 +245,7 @@ texinfo_documents = [
 # -- Options for Epub output ---------------------------------------------------
 
 # Bibliographic Dublin Core info.
-epub_title = u'HML Blast Validation'
+epub_title = u'service-ars'
 epub_author = u'Michael Halagan'
 epub_publisher = u'Michael Halagan'
 epub_copyright = u'2016, National Marrow Donor Program'

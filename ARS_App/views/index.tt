@@ -83,7 +83,13 @@
                           <div>
                               <input style="margin-left:83px;margin-top:-27px;" id="myFile" type="file" name="filename"></input>
                           </div>
-                          <a style="float:right;margin-left:265px;margin-top:-20px;" href="#" onclick="more(this);">more options</a>
+                          <div style="float:right;margin-left:265px;margin-top:-20px;">
+                              <% IF download.defined %>
+                                <a id="download" style="margin-right:10px;"class="btn btn-primary btn-large" href="<% request.uri_base %>/downloads/<% download %>" download="<% download %>">Download</a>
+                              <% END %>
+                              <a style="" href="#" onclick="more(this);">more options</a>
+                          </div>
+                         
                       </div>
                       <div id="showMore" style="display: none;margin-top:25px;margin-bottom:0px;width:100%;">
                           <div class="h-divider center_div" style="width:100%;"></div>
@@ -112,14 +118,6 @@
 
                   </div>
               </form>
-              <% IF download.defined %>
-                  <form id="submit_modal" action="<% request.uri_base %>/download" >
-                    <div id="Demo-BS" style="text-align:right;margin-top:-27px;">
-                      <input type="submit" class="btn btn-primary btn-large" onClick="downloadClient()" value="Download Results"></input>
-                      <span name="type"></span>
-                    </div>
-                  </form>
-                <% END %>
           </header>
       </div>
 

@@ -3,9 +3,9 @@ RESTful Service for Antigen Recognition Site Reduction
 
 Further documentation is available at [service-ars.readthedocs.org](http://search.maven.org/#search|ga|1|g%3A%22org.nmdp.ngs%22)
 
-## Build
+### Build
 
-## Docker Image
+### Docker Image
 [![](https://images.microbadger.com/badges/image/nmdpbioinformatics/docker-ars.svg)](http://microbadger.com/images/nmdpbioinformatics/docker-ars "Get your own image badge on microbadger.com")[![](https://images.microbadger.com/badges/version/nmdpbioinformatics/docker-ars.svg)](http://microbadger.com/images/nmdpbioinformatics/docker-ars "Get your own version badge on microbadger.com")
 
 
@@ -107,7 +107,7 @@ ars-resolution -c config.json < testInput.csv > testOutput.csv
  * Test::More Dancer
 
 
-## Documentation
+### Related Pages
 
  * [readthedocs.org](http://search.maven.org/#search|ga|1|g%3A%22org.nmdp.ngs%22)
  * [docker-ars](http://search.maven.org/#search|ga|1|g%3A%22org.nmdp.ngs%22)
