@@ -14,8 +14,8 @@ cd ../client-java
 mvn install
 
 # Install perl clients
-cd ../client-perl
-sudo perl Makefile.pl
-sudo make test
-sudo make install
+# cd ../client-perl
+# sudo perl Makefile.pl
+# sudo make test
+# sudo make install
 

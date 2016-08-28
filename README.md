@@ -1,6 +1,8 @@
 # service-ars
 RESTful Service for Antigen Recognition Site Reduction
 
+Further documentation is available at [service-ars.readthedocs.org](http://search.maven.org/#search|ga|1|g%3A%22org.nmdp.ngs%22)
+
 ## Build
 
 ## Docker Image
@@ -15,7 +17,7 @@ RESTful Service for Antigen Recognition Site Reduction
     # Do ARS reduction on a typing #
     curl http://localhost:3000/api/v1/redux?typing=A*01:01?dbversion=3.20
 
-   # Do ARS reduction on multiple subjects # 
+    # Do ARS reduction on multiple subjects # 
     curl --header "Content-type: application/json" --request POST 
     --data '{"arsFile":"hla_nom_g.txt","dbversion":"3.20.0","arsType":"G",
     "Subjects":[{"SubjectID":1,"typing":["A*01:01+A*01:02","B*08:01+B*07:02","C*07:01+C*07:01"]},

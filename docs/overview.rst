@@ -1,7 +1,7 @@
 Overview
 ================================
 
-Antigen Recognition Site (ARS)
+Antigen Recognition Site
 ------------------------
 
 
